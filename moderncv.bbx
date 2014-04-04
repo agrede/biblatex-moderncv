@@ -684,18 +684,25 @@
   \usebibmacro{begentry}%
   \usebibmacro{author/translator+others}%
   \setunit{\labelnamepunct}\newblock
+  \usebibmacro{title}%
+  \newunit
   \printlist{language}%
   \newunit\newblock
   \usebibmacro{byauthor}%
   \newunit\newblock
   \usebibmacro{in:}%
   \usebibmacro{bybookauthor}%
-  \setunit*{\newunitpunct}\newblock
+  \newunit\newblock
   \usebibmacro{maintitle+booktitle}%
   \newunit\newblock
   \usebibmacro{byeditor+others}%
   \newunit\newblock
   \printfield{edition}%
+  \newunit
+  \iffieldundef{maintitle}
+    {\printfield{volume}%
+     \printfield{part}}
+    {}%
   \newunit
   \printfield{volumes}%
   \newunit\newblock
@@ -703,9 +710,9 @@
   \newunit\newblock
   \printfield{note}%
   \newunit\newblock
-  \usebibmacro{chapter+pages}%
-  \newunit\newblock
   \usebibmacro{publisher+location+date}%
+  \newunit\newblock
+  \usebibmacro{chapter+pages}%
   \newunit\newblock
   \iftoggle{bbx:isbn}
     {\printfield{isbn}}
@@ -717,7 +724,16 @@
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
-  \usebibmacro{related}%
+  \iftoggle{bbx:related}
+    {\usebibmacro{related:init}%
+     \usebibmacro{related}}
+    {}%
+  \newunit\newblock
+  \iftoggle{bbx:authorrole}
+    {%
+      \usebibmacro{usera}
+    }
+    {}%
   \usebibmacro{finentry}%
 }
 
