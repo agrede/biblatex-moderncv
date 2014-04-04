@@ -11,14 +11,66 @@
 \ProvidesFile{moderncv.bbx}[2014/03/08 v1.2e biblatex bibliography style]
 
 \RequireBibliographyStyle{numeric-comp}
-%\renewbibmacro*{date}{}
-%\renewbibmacro*{date+extrayear}{}
-%\renewbibmacro*{issue+date}{}
-\newcommand*{\bibyear}{}
+
+% New options
+\newtoggle{bbx:articletitle}
+\newtoggle{bbx:chaptertitle}
+\newtoggle{bbx:pageranges}
+\newtoggle{bbx:skipauthorhash}
+\newtoggle{bbx:boldauthorhash}
+\edef\authorhash{}
+\DeclareBibliographyOption{articletitle}[true]{%
+  \settoggle{bbx:articletitle}{#1}%
+}
+\DeclareBibliographyOption{chaptertitle}[true]{%
+  \settoggle{bbx:chaptertitle}{#1}%
+}
+\DeclareBibliographyOption{pageranges}[true]{%
+  \settoggle{bbx:pageranges}{#1}%
+}
+\DeclareBibliographyOption{biblabel}{%
+  \ifstrequal{#1}{brackets}
+    {%
+      \DeclareFieldFormat{labelnumberwidth}{\mkbibbrackets{##1}}%
+      \setlength{\biblabelsep}{10 pt}%
+    }
+    {%
+      \DeclareFieldFormat{labelnumberwidth}{\mkbibsuperscript{##1}}%
+      \setlength{\biblabelsep}{0 pt}%
+    }%
+}
+\DeclareBibliographyOption{authorhash}{%
+  \edef\authorhash{\detokenize{#1}}
+}
+\DeclareBibliographyOption{boldauthorhash}[true]{%
+  \settoggle{bbx:boldauthorhash}{#1}%
+}
+\DeclareBibliographyOption{skipauthorhash}[true]{%
+  \settoggle{bbx:boldauthorhash}{#1}%
+}
+
 \ExecuteBibliographyOptions
   {
-    sorting      = ydnt
+    articletitle   = true       ,
+    chaptertitle   = true       ,
+    biblabel       = superscript,
+    boldauthorhash = true       ,
+    doi            = false      ,
+    eprint         = false      ,
+    firstinits     = true       ,
+    isbn           = false      ,
+    maxnames       = 999        ,
+    maxcitenames   = 2          ,
+    pageranges     = true       ,
+    punctfont      = true       ,
+    sorting        = ydnt       ,
+    skipauthorhash = false      ,
+    url            = false
   }
+
+\DeclareNameAlias{default}{last-first}
+
+% Bibliography list format
 \AtBeginBibliography{\renewcommand*{\bibyear}{}}
 
 \defbibenvironment{bibliography}
@@ -431,7 +483,7 @@
   \iftoggle{bbx:articletitle}
     {%
       \usebibmacro{title}%
-      \newblock
+      \newunit
     }
     {}%
   \printlist{language}%
@@ -447,7 +499,7 @@
   \usebibmacro{byeditor+others}%
   \newunit
   \usebibmacro{note+pages}%
-  \newunit
+  \newunit\newblock
   \iftoggle{bbx:isbn}
     {\printfield{issn}}
     {}%
@@ -455,14 +507,23 @@
   \iffieldundef{pages}
     {\usebibmacro{doi+eprint+url}}
     {}%
-  \setunit{\addspace}\newblock
+  \setunit{\addspace}\newblock%
   \usebibmacro{issue+date}%
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
-  \usebibmacro{related}%
+  \iftoggle{bbx:related}
+    {\usebibmacro{related:init}%
+     \usebibmacro{related}}
+    {}%
+  \newunit\newblock
+  \iftoggle{bbx:authorrole}
+    {%
+      \usebibmacro{usera}
+    }
+    {}%
   \usebibmacro{finentry}%
 }
 
