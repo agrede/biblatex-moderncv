@@ -585,15 +585,20 @@
 \DeclareBibliographyDriver{collection}{%
   \usebibmacro{bibindex}%
   \usebibmacro{begentry}%
-  \usebibmacro{maintitle+title}%
-  \newunit
   \usebibmacro{editor+others}%
   \setunit{\labelnamepunct}\newblock
+  \usebibmacro{maintitle+title}%
+  \newunit
   \printlist{language}%
   \newunit\newblock
   \usebibmacro{byeditor+others}%
   \newunit\newblock
   \printfield{edition}%
+  \newunit
+  \iffieldundef{maintitle}
+    {\printfield{volume}%
+     \printfield{part}}
+    {}%
   \newunit
   \printfield{volumes}%
   \newunit\newblock
@@ -601,10 +606,10 @@
   \newunit\newblock
   \printfield{note}%
   \newunit\newblock
-  \usebibmacro{chapter+pages}%
-  \newunit
   \usebibmacro{publisher+location+date}%
   \newunit\newblock
+  \usebibmacro{chapter+pages}%
+  \newunit
   \printfield{pagetotal}%
   \newunit\newblock
   \iftoggle{bbx:isbn}
@@ -617,7 +622,16 @@
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
-  \usebibmacro{related}%
+  \iftoggle{bbx:related}
+    {\usebibmacro{related:init}%
+     \usebibmacro{related}}
+    {}%
+  \newunit\newblock
+  \iftoggle{bbx:authorrole}
+    {%
+      \usebibmacro{usera}
+    }
+    {}%
   \usebibmacro{finentry}%
 }
 
