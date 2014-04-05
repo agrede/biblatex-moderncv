@@ -76,6 +76,7 @@
 \DeclareNameAlias{default}{last-first}
 
 % Bibliography list format
+\newcommand*{\bibyear}{}
 \AtBeginBibliography{\renewcommand*{\bibyear}{}}
 
 \defbibenvironment{bibliography}
@@ -98,12 +99,12 @@
 \DeclareFieldFormat*{title}{\mkbibemph{#1\isdot}}
 \DeclareFieldFormat[article,inproceedings,patent]{title}{%
   \iftoggle{bbx:articletitle}
-    {\mkbibemph{#1\isdot}}
+    {\mkbibquote{#1\isdot}}
     {}%
 }
 \DeclareFieldFormat[incollection]{title}{%
   \iftoggle{bbx:chaptertitle}
-    {\mkbibemph{#1\isdot}}
+    {\mkbibquote{#1\isdot}}
     {}%
 }
 
@@ -129,6 +130,7 @@
   \printtext[doi/url-link]{%
     \usebibmacro{journal}%
   }%
+  \newunit
   \setunit*{\addspace}%
   \iffieldundef{series}
     {}
@@ -158,6 +160,21 @@
     {\printfield{usera}}
     {}%
 }
+
+\newbibmacro*{organization+date}{%
+  \setunit{\addspace}%
+  \printtext[parens]{%
+    \printlist{organization}%
+    \newunit
+    \usebibmacro{date}%
+  }%
+  \newunit
+}
+
+\renewbibmacro*{date}{\mkbibdatelong{}{month}{day}}
+
+
+\newcommand*{\mkbibdatenoyear}[3]{\mkbibdatelong{}{#2}{#3}}
 
 
 % New bibliography drivers, using the required order of fields. These
@@ -191,7 +208,9 @@
     {\usebibmacro{doi+eprint+url}}
     {}%
   \setunit{\addspace}\newblock%
-  \usebibmacro{date}%
+  \printtext[parens]{%
+    \usebibmacro{date}%
+  }%
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \setunit{\bibpagerefpunct}\newblock
