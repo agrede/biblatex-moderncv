@@ -93,12 +93,12 @@
 
 \DeclareFieldFormat[article,inproceedings,patent]{title}{%
   \iftoggle{bbx:articletitle}
-    {\mkbibquote{#1\isdot}}
+    {\mkbibemph{#1\isdot}}
     {}%
 }
 \DeclareFieldFormat[incollection]{title}{%
   \iftoggle{bbx:chaptertitle}
-    {\mkbibquote{#1\isdot}}
+    {\mkbibemph{#1\isdot}}
     {}%
 }
 
