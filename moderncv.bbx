@@ -18,7 +18,11 @@
 \newtoggle{bbx:pageranges}
 \newtoggle{bbx:skipauthorhash}
 \newtoggle{bbx:boldauthorhash}
+\newtoggle{bbx:authorrole}
 \edef\authorhash{}
+\DeclareBibliographyOption{authorrole}[true]{%
+  \settoggle{bbx:authorrole}{#1}%
+}
 \DeclareBibliographyOption{articletitle}[true]{%
   \settoggle{bbx:articletitle}{#1}%
 }
@@ -51,6 +55,7 @@
 
 \ExecuteBibliographyOptions
   {
+    authorrole     = false      ,
     articletitle   = true       ,
     chaptertitle   = true       ,
     biblabel       = superscript,
@@ -90,7 +95,7 @@
 
 
 % Custom field formats
-
+\DeclareFieldFormat*{title}{\mkbibemph{#1\isdot}}
 \DeclareFieldFormat[article,inproceedings,patent]{title}{%
   \iftoggle{bbx:articletitle}
     {\mkbibemph{#1\isdot}}
@@ -102,7 +107,52 @@
     {}%
 }
 
+\DeclareFieldFormat[article]{number}{\mkbibparens{#1}}
+
+\DeclareFieldFormat{doi/url-link}{%
+  \ifhyperref
+    {%
+      \iffieldundef{doi}
+        {%
+          \iffieldundef{url}
+            {\@firstofone}
+            {\href{\thefield{url}}}%
+        }
+        {\href{http://dx.doi.org/\thefield{doi}}}%
+    }
+    {\@firstofone}%
+      {#1}%
+}
+
 % Bibliography Macros
+\renewbibmacro*{journal+issuetitle}{%
+  \printtext[doi/url-link]{%
+    \usebibmacro{journal}%
+  }%
+  \setunit*{\addspace}%
+  \iffieldundef{series}
+    {}
+    {\newunit
+     \printfield{series}%
+     \setunit{\addspace}}%
+  \usebibmacro{volume+number+eid}%
+  \setunit{\addspace}%
+  \usebibmacro{issue}%
+  \newunit
+}
+
+\renewbibmacro*{volume+number+eid}{%
+  \printfield{volume}%
+  \iffieldundef{number}
+    {}
+    {%
+      \addspace
+      \printfield{number}
+    }%
+  \newunit
+  \printfield{eid}%
+}
+
 \newbibmacro*{authorrole}{%
   \iftoggle{bbx:authorrole}%
     {\printfield{usera}}
@@ -141,7 +191,7 @@
     {\usebibmacro{doi+eprint+url}}
     {}%
   \setunit{\addspace}\newblock%
-  \usebibmacro{issue+date}%
+  \usebibmacro{date}%
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \setunit{\bibpagerefpunct}\newblock
