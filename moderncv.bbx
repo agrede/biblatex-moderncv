@@ -91,6 +91,16 @@
 
 % Custom field formats
 
+\DeclareFieldFormat[article,inproceedings,patent]{title}{%
+  \iftoggle{bbx:articletitle}
+    {\mkbibquote{#1\isdot}}
+    {}%
+}
+\DeclareFieldFormat[incollection]{title}{%
+  \iftoggle{bbx:chaptertitle}
+    {\mkbibquote{#1\isdot}}
+    {}%
+}
 
 
 \renewbibmacro*{publisher+location+date}{%
@@ -102,6 +112,7 @@
     \usebibmacro{date}%
   }%
 }
+
 
 \DeclareBibliographyDriver{article}{%
   \usebibmacro{bibindex}%
@@ -153,12 +164,8 @@
   \usebibmacro{begentry}%
   \usebibmacro{author/translator+others}%
   \setunit{\labelnamepunct}\newblock
-  \iftoggle{bbx:articletitle}
-    {%
-      \usebibmacro{title}%
-      \newblock
-    }
-    {}%
+  \usebibmacro{title}%
+  \newunit
   \printlist{language}%
   \newunit\newblock
   \usebibmacro{byauthor}%
@@ -480,12 +487,8 @@
   \usebibmacro{begentry}%
   \usebibmacro{author/translator+others}%
   \setunit{\labelnamepunct}\newblock
-  \iftoggle{bbx:articletitle}
-    {%
-      \usebibmacro{title}%
-      \newunit
-    }
-    {}%
+  \usebibmacro{title}%
+  \newunit
   \printlist{language}%
   \newunit\newblock
   \usebibmacro{byauthor}%
@@ -799,12 +802,8 @@
   \usebibmacro{begentry}%
   \usebibmacro{author/translator+others}%
   \setunit{\labelnamepunct}\newblock
-  \iftoggle{bbx:articletitle}
-    {%
-      \usebibmacro{title}%
-      \newblock
-    }
-    {}%
+  \usebibmacro{title}%
+  \newunit
   \printlist{language}%
   \newunit\newblock
   \usebibmacro{byauthor}%
