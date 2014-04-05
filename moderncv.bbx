@@ -998,7 +998,8 @@
   \usebibmacro{begentry}%
   \usebibmacro{author}%
   \setunit{\labelnamepunct}\newblock
-  \nopunct
+  \usebibmacro{title}%
+  \newunit
   \printlist{language}%
   \newunit\newblock
   \usebibmacro{byauthor}%
@@ -1011,18 +1012,28 @@
     {\setunit*{\addspace}%
      \printtext[parens]{%
        \printlist[][-\value{listtotal}]{location}}}%
+  \setunit{\addspace}%
+  \printtext[parens]{%
+    \usebibmacro{byholder}%
+    \newunit
+    \usebibmacro{date}%
+  }%
   \newunit\newblock
   \printfield{note}%
   \newunit\newblock
   \usebibmacro{doi+eprint+url}%
-  \nopunct
-  \printfield[parens]{year}%
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
   \usebibmacro{related}%
+  \newunit\newblock
+  \iftoggle{bbx:authorrole}
+    {%
+      \usebibmacro{usera}
+    }
+    {}%
   \usebibmacro{finentry}%
 }
 
@@ -1066,8 +1077,16 @@
   \usebibmacro{pageref}%
   \newunit\newblock
   \usebibmacro{related}%
+  \newunit\newblock
+  \iftoggle{bbx:authorrole}
+    {%
+      \usebibmacro{usera}
+    }
+    {}%
   \usebibmacro{finentry}%
 }
+
+
 
 %%
 %% Copyright (C) 2013--2014 by
