@@ -179,17 +179,17 @@
 \renewbibmacro*{date}{%
   \iffieldundef{endyear}%
     {\mkbibdatelong{}{month}{day}}%
-    {\mkbibranetrunc{long}{date}}
+    {\mkbibrangetrunc{long}{date}}
 }
 
 \renewbibmacro*{maintitle+booktitle}{%
+  \iffieldundef{maintitle}
+    {}
+    {%
+      \usebibmacro{maintitle}%
+      \newunit
+    }%
   \printtext[doi/url-link]{%
-    \iffieldundef{maintitle}
-      {}
-      {%
-        \usebibmacro{maintitle}%
-        \newunit
-      }%
     \usebibmacro{booktitle}%
   }%
   \newunit\newblock
