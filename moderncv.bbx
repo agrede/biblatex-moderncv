@@ -129,6 +129,8 @@
     {\@firstofone}%
       {#1}%
 }
+\DeclareFieldFormat*{eventtitle}{\mkbibemph{#1}}
+\DeclareFieldFormat*{eventtitleaddon}{\mkbibemph{#1}}
 
 % Bibliography Macros
 \renewbibmacro*{journal+issuetitle}{%
@@ -178,8 +180,8 @@
 
 \renewbibmacro*{date}{%
   \iffieldundef{endyear}%
-    {\mkbibdatelong{}{month}{day}}%
-    {\mkbibrangetrunc{long}{date}}
+    {\mkbibdatelong{}{month}{day}}
+    {\mkbibrangetrunc{long}{date}}%
 }
 
 \renewbibmacro*{maintitle+booktitle}{%
@@ -497,22 +499,26 @@
   \newunit\newblock
   \usebibmacro{byauthor}%
   \newunit\newblock
-  \ifboolexpr{ not togl {bbx:showevent} or test \iffieldundef{eventtitle}}
+  \ifboolexpr{
+    not togl {bbx:showevent}
+    or
+    test {\iffieldundef{eventtitle}}
+  }
     {%
       \usebibmacro{in:}%
       \usebibmacro{maintitle+booktitle}%
       \newunit\newblock
       \usebibmacro{byeditor+others}%
       \newunit\newblock
-      \newunit
-      \printfield{volumes}%
-    }
-    {%
-      \usebibmacro{event+venue+date}%
-    }
+      \printfield{volumes}}
+    {\usebibmacro{event+venue+date}}%
   \newunit\newblock
   \printfield{note}%
-  \ifboolexpr{ not togl {bbx:showevent} or test \iffieldundef{eventtitle}}
+  \ifboolexpr{
+    not togl {bbx:showevent}
+    or
+    test {\iffieldundef{eventtitle}}
+  }
     {%
       \newunit\newblock
       \usebibmacro{chapter+pages}%
@@ -521,8 +527,7 @@
         {\printfield{isbn}}
         {}%
       \newunit\newblock
-      \usebibmacro{organization+date}%
-    }
+      \usebibmacro{organization+date}}
     {}%
   \newunit\newblock
   \usebibmacro{doi+eprint+url}%
