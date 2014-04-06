@@ -171,10 +171,11 @@
   \newunit
 }
 
-\renewbibmacro*{date}{\mkbibdatelong{}{month}{day}}
-
-
-\newcommand*{\mkbibdatenoyear}[3]{\mkbibdatelong{}{#2}{#3}}
+\renewbibmacro*{date}{%
+  \iffieldundef{endyear}%
+    {\mkbibdatelong{}{month}{day}}%
+    {\mkbibranetrunc{long}{date}}
+}
 
 
 % New bibliography drivers, using the required order of fields. These
