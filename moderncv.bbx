@@ -182,6 +182,26 @@
     {\mkbibranetrunc{long}{date}}
 }
 
+\renewbibmacro*{maintitle+booktitle}{%
+  \printtext[doi/url-link]{%
+    \iffieldundef{maintitle}
+      {}
+      {%
+        \usebibmacro{maintitle}%
+        \newunit
+      }%
+    \usebibmacro{booktitle}%
+  }%
+  \newunit\newblock
+  \iffieldundef{volume}
+    {}
+    {%
+      \printfield{volume}%
+      \printfield{part}%
+    }%
+  \newunit
+}
+
 
 % New bibliography drivers, using the required order of fields. These
 % are mainly copied from standard.bbx then modified.
@@ -377,11 +397,6 @@
   \newunit\newblock
   \printfield{edition}%
   \newunit
-  \iffieldundef{maintitle}
-    {\printfield{volume}%
-     \printfield{part}}
-    {}%
-  \newunit
   \printfield{volumes}%
   \newunit\newblock
   \usebibmacro{series+number}%
@@ -427,11 +442,6 @@
   \newunit\newblock
   \printfield{edition}%
   \newunit
-  \iffieldundef{maintitle}
-    {\printfield{volume}%
-     \printfield{part}}
-    {}%
-  \newunit
   \printfield{volumes}%
   \newunit\newblock
   \usebibmacro{series+number}%
@@ -476,10 +486,6 @@
       \newunit\newblock
       \usebibmacro{byeditor+others}%
       \newunit\newblock
-      \iffieldundef{maintitle}
-        {\printfield{volume}%
-          \printfield{part}}
-        {}%
       \newunit
       \printfield{volumes}%
     }
