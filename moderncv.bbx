@@ -15,6 +15,7 @@
 % New options
 \newtoggle{bbx:articletitle}
 \newtoggle{bbx:chaptertitle}
+\newtoggle{bbx:showevent}
 \newtoggle{bbx:pageranges}
 \newtoggle{bbx:skipauthorhash}
 \newtoggle{bbx:boldauthorhash}
@@ -28,6 +29,9 @@
 }
 \DeclareBibliographyOption{chaptertitle}[true]{%
   \settoggle{bbx:chaptertitle}{#1}%
+}
+\DeclareBibliographyOption{showevent}[true]{%
+  \settoggle{bbx:showevent}{#1}%
 }
 \DeclareBibliographyOption{pageranges}[true]{%
   \settoggle{bbx:pageranges}{#1}%
@@ -68,6 +72,7 @@
     maxcitenames   = 2          ,
     pageranges     = true       ,
     punctfont      = true       ,
+    showevent      = false      ,
     sorting        = ydnt       ,
     skipauthorhash = false      ,
     url            = false
@@ -464,41 +469,55 @@
   \newunit\newblock
   \usebibmacro{byauthor}%
   \newunit\newblock
-  \usebibmacro{in:}%
-  \usebibmacro{maintitle+booktitle}%
-  \newunit\newblock
-  \usebibmacro{event+venue+date}%
-  \newunit\newblock
-  \usebibmacro{byeditor+others}%
-  \newunit\newblock
-  \iffieldundef{maintitle}
-    {\printfield{volume}%
-     \printfield{part}}
-    {}%
-  \newunit
-  \printfield{volumes}%
+  \ifboolexpr{ not togl {bbx:showevent} or test \iffieldundef{eventtitle}}
+    {%
+      \usebibmacro{in:}%
+      \usebibmacro{maintitle+booktitle}%
+      \newunit\newblock
+      \usebibmacro{byeditor+others}%
+      \newunit\newblock
+      \iffieldundef{maintitle}
+        {\printfield{volume}%
+          \printfield{part}}
+        {}%
+      \newunit
+      \printfield{volumes}%
+      \newunit\newblock
+      \printfield{note}%
+      \newunit\newblock
+      \usebibmacro{organization+date}%
+      \newunit\newblock
+      \usebibmacro{chapter+pages}%
+      \newunit\newblock
+      \iftoggle{bbx:isbn}
+        {\printfield{isbn}}
+        {}%
+    }
+    {%
+      \usebibmacro{event+venue+date}%
+    }
   \newunit\newblock
   \printfield{note}%
   \newunit\newblock
   \usebibmacro{organization+date}%
-  \newunit\newblock
-  \usebibmacro{chapter+pages}%
-  \newunit\newblock
-  \iftoggle{bbx:isbn}
-    {\printfield{isbn}}
-    {}%
-  \newunit\newblock
-  \iftoggle{bbx:isbn}
-    {\printfield{isbn}}
+  \ifboolexpr{ not togl {bbx:showevent} or test \iffieldundef{eventtitle}}
+    {%
+      \newunit\newblock
+      \usebibmacro{chapter+pages}%
+      \newunit\newblock
+      \iftoggle{bbx:isbn}
+        {\printfield{isbn}}
+        {}%
+    }
     {}%
   \newunit\newblock
   \usebibmacro{doi+eprint+url}%
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
-  \setunit{\bibpagerefpunct}\newblock
-  \usebibmacro{pageref}%
   \newunit\newblock
   \usebibmacro{authorrole}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
   \newunit\newblock
   \usebibmacro{related}%
   \usebibmacro{finentry}%
