@@ -482,24 +482,12 @@
         {}%
       \newunit
       \printfield{volumes}%
-      \newunit\newblock
-      \printfield{note}%
-      \newunit\newblock
-      \usebibmacro{organization+date}%
-      \newunit\newblock
-      \usebibmacro{chapter+pages}%
-      \newunit\newblock
-      \iftoggle{bbx:isbn}
-        {\printfield{isbn}}
-        {}%
     }
     {%
       \usebibmacro{event+venue+date}%
     }
   \newunit\newblock
   \printfield{note}%
-  \newunit\newblock
-  \usebibmacro{organization+date}%
   \ifboolexpr{ not togl {bbx:showevent} or test \iffieldundef{eventtitle}}
     {%
       \newunit\newblock
@@ -508,6 +496,8 @@
       \iftoggle{bbx:isbn}
         {\printfield{isbn}}
         {}%
+      \newunit\newblock
+      \usebibmacro{organization+date}%
     }
     {}%
   \newunit\newblock
