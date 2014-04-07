@@ -54,7 +54,7 @@
   \settoggle{bbx:boldauthorhash}{#1}%
 }
 \DeclareBibliographyOption{skipauthorhash}[true]{%
-  \settoggle{bbx:boldauthorhash}{#1}%
+  \settoggle{bbx:skipauthorhash}{#1}%
 }
 
 \ExecuteBibliographyOptions
@@ -133,6 +133,20 @@
 \DeclareFieldFormat*{eventtitleaddon}{\mkbibemph{#1}}
 
 % Bibliography Macros
+\newcommand*{\bibnametest}[1]{%
+  \iffieldequals{hash}{\authorhash}
+    {\iftoggle{bbx:skipauthorhash}
+      {}
+      {\iftoggle{bbx:boldauthorhash}
+        {\mkbibbold{#1}}
+        {#1}}}
+    {#1}}
+
+\renewcommand*{\mkbibnamefirst}[1]{\bibnametest{#1}}
+\renewcommand*{\mkbibnamelast}[1]{\bibnametest{#1}}
+\renewcommand*{\mkbibnameprefix}[1]{\bibnametest{#1}}
+\renewcommand*{\mkbibnameaffix}[1]{\bibnametest{#1}}
+
 \renewbibmacro*{journal+issuetitle}{%
   \printtext[doi/url-link]{%
     \usebibmacro{journal}%
