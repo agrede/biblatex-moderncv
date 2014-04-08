@@ -17,8 +17,7 @@
 \newtoggle{bbx:chaptertitle}
 \newtoggle{bbx:showevent}
 \newtoggle{bbx:pageranges}
-\newtoggle{bbx:skipauthorhash}
-\newtoggle{bbx:boldauthorhash}
+\newtoggle{bbx:indauthorhash}
 \newtoggle{bbx:authorrole}
 \edef\authorhash{}
 \DeclareBibliographyOption{authorrole}[true]{%
@@ -50,11 +49,8 @@
 \DeclareBibliographyOption{authorhash}{%
   \edef\authorhash{\detokenize{#1}}
 }
-\DeclareBibliographyOption{boldauthorhash}[true]{%
-  \settoggle{bbx:boldauthorhash}{#1}%
-}
-\DeclareBibliographyOption{skipauthorhash}[true]{%
-  \settoggle{bbx:skipauthorhash}{#1}%
+\DeclareBibliographyOption{indauthorhash}[true]{%
+  \settoggle{bbx:indauthorhash}{#1}%
 }
 
 \ExecuteBibliographyOptions
@@ -63,7 +59,7 @@
     articletitle   = true       ,
     chaptertitle   = true       ,
     biblabel       = superscript,
-    boldauthorhash = true       ,
+    indauthorhash  = true       ,
     doi            = false      ,
     eprint         = false      ,
     firstinits     = true       ,
@@ -74,7 +70,6 @@
     punctfont      = true       ,
     showevent      = false      ,
     sorting        = ydnt       ,
-    skipauthorhash = false      ,
     url            = false
   }
 
@@ -94,6 +89,7 @@
       \setlength{\labelwidth}{\hintscolumnwidth}%
       \setlength{\labelsep}{\separatorcolumnwidth}%
       \leftmargin\labelwidth%
+      \itemindent-\bibhang%
       \advance\leftmargin\labelsep}%
       \sloppy\clubpenalty4000\widowpenalty4000}
   {\endlist}
@@ -134,14 +130,13 @@
 \DeclareFieldFormat[article]{volume}{\mkbibbold{#1}}
 
 % Bibliography Macros
+\newcommand*{\indauthorhash}[1]{\mkbibbold{#1}}
 \newcommand*{\bibnametest}[1]{%
   \iffieldequals{hash}{\authorhash}
-    {\iftoggle{bbx:skipauthorhash}
-      {}
-      {\iftoggle{bbx:boldauthorhash}
-        {\mkbibbold{#1}}
-        {#1}}}
-    {#1}}
+    {\iftoggle{bbx:indauthorhash}
+      {\indauthorhash{#1}}
+      {#1}}
+  {#1}}
 
 \renewcommand*{\mkbibnamefirst}[1]{\bibnametest{#1}}
 \renewcommand*{\mkbibnamelast}[1]{\bibnametest{#1}}
@@ -268,8 +263,9 @@
   \iffieldundef{pages}
     {\usebibmacro{doi+eprint+url}}
     {}%
-  \setunit{\addspace}\newblock%
-  \usebibmacro{date}%
+  \printtext[parens]{
+    \usebibmacro{date}%
+  }
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
