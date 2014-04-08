@@ -96,6 +96,12 @@
   {\item}
 
 
+\newrobustcmd*{\mkbibcolor}{\textcolor}
+\protected\long\def\blx@imc@mkbibcolor#1#2{%
+  \textcolor{#1}{#2}\blx@imc@setpunctfont{\textcolor{#1}}}
+
+\blx@regimcs{\mkbibcolor}
+
 % Custom field formats
 \DeclareFieldFormat*{title}{\mkbibemph{#1\isdot}}
 \DeclareFieldFormat[article,inproceedings,patent]{title}{%
