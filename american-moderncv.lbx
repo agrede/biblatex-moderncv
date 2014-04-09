@@ -4,41 +4,41 @@
 \InheritBibliographyStrings{american}
 
 \protected\gdef\lbx@us@mkbibrangetrunc@long#1#2{%
-  \ifboolexpr{
-    test {\iffieldundef{#2year}}
-    and
-    test {\iffieldundef{#2month}}
-  }
-  {}
+  \ifboolexpr{%
+    test {\iffieldundef{#2year}}%
+    and%
+    test {\iffieldundef{#2month}}%
+  }%
+  {}%
   {\printtext[#2date]{%
-      \ifboolexpr{
-        test {\iffieldsequal{#2year}{#2endyear}}
-        or
-        (test {\iffieldundef{#2endyear}} and test {\iffieldundef{#2year}})
-      }
-        {\csuse{mkbibdate#1}{}{#2month}{#2day}}
+      \ifboolexpr{%
+        test {\iffieldsequal{#2year}{#2endyear}}%
+        or%
+        (test {\iffieldundef{#2endyear}} and test {\iffieldundef{#2year}})%
+      }%
+        {\csuse{mkbibdate#1}{}{#2month}{#2day}}%
         {\csuse{mkbibdate#1}{#2year}{#2month}{#2day}}%
-      \ifboolexpr{
-        test {\iffieldundef{#2endyear}}
-        and
-        test {\iffieldundef{#2endmonth}}
-      }
-        {}
-        {\bibdatedash
-          \ifboolexpr{
-            test {\iffieldsequal{#2year}{#2endyear}}
-            or
-            test {\iffieldundef{#2endyear}}
-          }
-            {\iffieldsequal{#2month}{#2endmonth}
-              {\iffieldundef{#2year}
-                {\csuse{mkbibdate#1}{}{}{#2endday}}
-                {\csuse{mkbibdate#1}{#2year}{}{#2endday}}
-              }
-              {\iffieldundef{#2year}
-                {\csuse{mkbibdate#1}{}{#2endmonth}{#2endday}}
-                {\csuse{mkbibdate#1}{#2year}{#2endmonth}{#2endday}}
-              }}
+      \ifboolexpr{%
+        test {\iffieldundef{#2endyear}}%
+        and%
+        test {\iffieldundef{#2endmonth}}%
+      }%
+        {}%
+        {\bibdatedash%
+          \ifboolexpr{%
+            test {\iffieldsequal{#2year}{#2endyear}}%
+            or%
+            test {\iffieldundef{#2endyear}}%
+          }%
+            {\iffieldsequal{#2month}{#2endmonth}%
+              {\iffieldundef{#2year}%
+                {\csuse{mkbibdate#1}{}{}{#2endday}}%
+                {\csuse{mkbibdate#1}{#2year}{}{#2endday}}%
+              }%
+              {\iffieldundef{#2year}%
+                {\csuse{mkbibdate#1}{}{#2endmonth}{#2endday}}%
+                {\csuse{mkbibdate#1}{#2year}{#2endmonth}{#2endday}}%
+              }}%
              {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}}}}}
 
 % \protected\gdef\lbx@us@mkbibrangetrunc@long#1#2{%

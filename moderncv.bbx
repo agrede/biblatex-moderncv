@@ -185,22 +185,40 @@
 }
 
 \newbibmacro*{organization+date}{%
-  \setunit{\addspace}%
+  \setunit*{\addspace}%
   \printtext[parens]{%
+    \iflistundef{organization}%
+      {\setunit*{\addcomma\space}}%
+      {\setunit*{\addcolon\space}}%
     \printlist{organization}%
-    \newunit
+    \setunit*{\addcomma\space}%
     \usebibmacro{date}%
   }%
-  \newunit
+  \newunit%
 }
+
+\newcommand*{\tmpyear}{}
+\newcommand*{\tmpendyear}{}
 
 \renewbibmacro*{date}{%
-  \iffieldundef{endyear}%
-    {\mkbibdatelong{}{month}{day}}
-    {\mkbibrangetrunc{long}{date}}%
+  \ifboolexpr{%
+    test {\iffieldsequal{year}{endyear}}%
+    or%
+    test {\iffieldundef{endyear}}%
+  }%
+    {%
+      \savefield{year}{\tmpyear}%
+      \savefield{endyear}{\tmpendyear}%
+      \clearfield{year}%
+      \clearfield{endyear}%
+      \printdate%
+      \restorefield{year}{\tmpyear}%
+      \restorefield{endyear}{\tmpyear}%
+    }%
+    {\printdate}%
 }
 
-\renewbibmacro*{maintitle+booktitle}{%
+\renewbibmacro*{maintitle+booktitle}{
   \iffieldundef{maintitle}
     {}
     {%
@@ -212,7 +230,7 @@
   }%
   \newunit\newblock
   \iffieldundef{volume}
-    {}
+    {}%
     {%
       \printfield{volume}%
       \printfield{part}%
@@ -220,23 +238,43 @@
   \newunit
 }
 
+\newbibmacro*{eventdate}{%
+  \ifboolexpr{
+    test {\iffieldsequal{year}{eventyear}}
+    and
+    (test {\iffieldsequal{year}{eventendyear}} or test {\iffieldundef{eventendyear}})
+  }%
+    {%
+      \savefield{eventyear}{\tmpyear}%
+      \savefield{eventendyear}{\tempendyear}%
+      \clearfield{eventyear}%
+      \clearfield{eventendyear}%
+      \printeventdate%
+      \restorefield{eventyear}{\tmpyear}%
+      \restorefield{eventendyear}{\tmpendyear}%
+    }%
+    {\printeventdate}%
+}
+
+% \newbibmacro*{eventdate}{\printeventdate}
+
 \renewbibmacro*{event+venue+date}{%
   \printtext[doi/url-link]{%
     \printfield{eventtitle}%
   }%
-  \newunit
+  \newunit%
   \printfield{eventtitleaddon}%
-  \ifboolexpr{
+  \ifboolexpr{%
     test {\iffieldundef{venue}}
     and
     test {\iffieldundef{eventyear}}
-  }
-    {}
+  }%
+    {}%
     {\setunit*{\addspace}%
      \printtext[parens]{%
        \printfield{venue}%
        \setunit*{\addcomma\space}%
-       \printeventdate}}%
+       \usebibmacro{eventdate}}}%
   \newunit}
 
 % New bibliography drivers, using the required order of fields. These
@@ -269,7 +307,7 @@
   \iffieldundef{pages}
     {\usebibmacro{doi+eprint+url}}
     {}%
-  \printtext[parens]{
+  \printtext[parens]{%
     \usebibmacro{date}%
   }
   \newunit\newblock
@@ -531,11 +569,11 @@
     {\usebibmacro{event+venue+date}}%
   \newunit\newblock
   \printfield{note}%
-  \ifboolexpr{
-    not togl {bbx:showevent}
-    or
-    test {\iffieldundef{eventtitle}}
-  }
+  \ifboolexpr{%
+    not togl {bbx:showevent}%
+    or%
+    test {\iffieldundef{eventtitle}}%
+  }%
     {%
       \newunit\newblock
       \usebibmacro{chapter+pages}%
@@ -544,7 +582,7 @@
         {\printfield{isbn}}
         {}%
       \newunit\newblock
-      \usebibmacro{organization+date}}
+      \usebibmacro{location+organization+date}}%
     {}%
   \newunit\newblock
   \usebibmacro{doi+eprint+url}%
