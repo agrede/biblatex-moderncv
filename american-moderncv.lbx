@@ -1,32 +1,63 @@
-\ProvidesFile{english-moderncv.lbx}
+\ProvidesFile{american-moderncv.lbx}
 [\abx@lbxid]
 \InheritBibliographyExtras{american}
+\InheritBibliographyStrings{american}
 
 \protected\gdef\lbx@us@mkbibrangetrunc@long#1#2{%
-  \iffieldundef{#2year}
-    {}
-    {\printtext[#2date]{%
-       \ifboolexpr{
-         test {\iffieldsequal{#2year}{#2endyear}}
-         or
-         (test {\iffieldundef{#2endyear}} and test {\iffieldsequal{#2year}{year}})
-       }
-	 {\csuse{mkbibdate#1}{}{#2month}{#2day}}
-	 {\csuse{mkbibdate#1}{#2year}{#2month}{#2day}}%
-       \iffieldundef{#2endyear}
-	 {}
-	 {\iffieldequalstr{#2endyear}{}
-            {\mbox{\bibdatedash}}
-	    {\bibdatedash
-             \iffieldsequal{#2year}{#2endyear}
-	       {\iffieldsequal{#2month}{#2endmonth}
-        	  {\iffieldsequal{#2endyear}{year}
-                    {\csuse{mkbibdate#1}{}{}{#2endday}}
-                    {\csuse{mkbibdate#1}{#2endyear}{}{#2endday}}}
-        	  {\iffieldsequal{#2endyear}{year}
-                    {\csuse{mkbibdate#1}{}{}{#2endday}}
-                    {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}}}
-	       {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}}}}}}
+  \ifboolexpr{
+    test {\iffieldundef{#2year}}
+    and
+    test {\iffieldundef{#2month}}
+  }
+  {}
+  {\printtext[#2date]{%
+      \ifboolexpr{
+        test {\iffieldsequal{#2year}{#2endyear}}
+        or
+        (test {\iffieldundef{#2endyear}} and test {\iffieldundef{#2year}})
+      }
+        {\csuse{mkbibdate#1}{}{#2month}{#2day}}
+        {\csuse{mkbibdate#1}{#2year}{#2month}{#2day}}%
+      \ifboolexpr{
+        test {\iffieldundef{#2endyear}}
+        and
+        test {\iffieldundef{#2endmonth}}
+      }
+        {}
+        {\bibdatedash
+          \ifboolexpr{
+            test {\iffieldsequal{#2year}{#2endyear}}
+            or
+            test {\iffieldundef{#2endyear}}
+          }
+            {\iffieldsequal{#2month}{#2endmonth}
+              {\iffieldundef{#2year}
+                {\csuse{mkbibdate#1}{}{}{#2endday}}
+                {\csuse{mkbibdate#1}{#2year}{}{#2endday}}
+              }
+              {\iffieldundef{#2year}
+                {\csuse{mkbibdate#1}{}{#2endmonth}{#2endday}}
+                {\csuse{mkbibdate#1}{#2year}{#2endmonth}{#2endday}}
+              }}
+             {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}}}}}
+
+% \protected\gdef\lbx@us@mkbibrangetrunc@long#1#2{%
+%   \iffieldundef{#2year}
+%     {}
+%     {\printtext[#2date]{%
+%        \iffieldsequal{#2year}{#2endyear}
+% 	 {\csuse{mkbibdate#1}{}{#2month}{#2day}}
+% 	 {\csuse{mkbibdate#1}{#2year}{#2month}{#2day}}%
+%        \iffieldundef{#2endyear}
+% 	 {}
+% 	 {\iffieldequalstr{#2endyear}{}
+%             {\mbox{\bibdatedash}}
+% 	    {\bibdatedash
+% 	     \iffieldsequal{#2year}{#2endyear}
+% 	       {\iffieldsequal{#2month}{#2endmonth}
+%         	  {\csuse{mkbibdate#1}{#2endyear}{}{#2endday}}
+% 		  {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}}
+% 	       {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}}}}}}
 
 \protected\gdef\lbx@us@mkbibrangetrunc@short#1#2{%
   \iffieldundef{#2year}
