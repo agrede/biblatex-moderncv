@@ -53,6 +53,23 @@
   \settoggle{bbx:indauthorhash}{#1}%
 }
 
+% New Sorting Schemes
+\DeclareSortingScheme{ddnt}{
+  \sort[direction=descending]{\field{year}}
+  \sort[direction=descending]{\field{month}}
+  \sort[direction=descending]{\field{day}}
+  \sort[sortcase=false]{
+    \field{sortname}
+    \field{author}
+    \field{editor}
+    \field{translator}
+  }
+  \sort[sortcase=false]{
+    \field{sorttitle}
+    \field{title}
+  }
+}
+
 \ExecuteBibliographyOptions
   {
     authorrole     = false      ,
@@ -69,7 +86,7 @@
     pageranges     = true       ,
     punctfont      = true       ,
     showevent      = false      ,
-    sorting        = ydnt       ,
+    sorting        = ddnt       ,
     url            = false
   }
 
@@ -274,6 +291,30 @@
      \printtext[parens]{%
        \printfield{venue}%
        \setunit*{\addcomma\space}%
+       \usebibmacro{eventdate}}}%
+  \newunit}
+
+
+\newbibmacro*{event+venue+location+date}{%
+  \printtext[doi/url-link]{%
+    \printfield{eventtitle}%
+  }%
+  \newunit%
+  \printfield{eventtitleaddon}%
+  \ifboolexpr{%
+    test {\iffieldundef{venue}}
+    and
+    test {\iffieldundef{eventyear}}
+    and
+    test {\iffieldundef{location}}
+  }%
+    {}%
+    {\setunit*{\addspace}%
+     \printtext[parens]{%
+       \printfield{venue}%
+       \setunit*{\addcomma\space}%
+       \printlist{location}%
+       \newunit%
        \usebibmacro{eventdate}}}%
   \newunit}
 
@@ -554,25 +595,25 @@
   \newunit\newblock
   \usebibmacro{byauthor}%
   \newunit\newblock
-  \ifboolexpr{
+  \ifboolexpr{%
     not togl {bbx:showevent}
     or
     test {\iffieldundef{eventtitle}}
-  }
+  }%
     {%
       \usebibmacro{in:}%
       \usebibmacro{maintitle+booktitle}%
       \newunit\newblock
       \usebibmacro{byeditor+others}%
       \newunit\newblock
-      \printfield{volumes}}
-    {\usebibmacro{event+venue+date}}%
+      \printfield{volumes}}%
+    {\usebibmacro{event+venue+location+date}}%
   \newunit\newblock
   \printfield{note}%
-  \ifboolexpr{%
-    not togl {bbx:showevent}%
-    or%
-    test {\iffieldundef{eventtitle}}%
+  \ifboolexpr{
+    not togl {bbx:showevent}
+    or
+    test {\iffieldundef{eventtitle}}
   }%
     {%
       \newunit\newblock
