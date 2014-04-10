@@ -1,0 +1,38 @@
+\documentclass[letter,10pt,american]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+\usepackage{textcomp}
+\usepackage[
+   breaklinks=true,
+   colorlinks=true,
+   linkcolor=blue,
+   citecolor=blue,
+   urlcolor=blue]{hyperref}
+
+\usepackage[american]{babel}
+\usepackage{csquotes}
+\usepackage[
+   backend=biber,
+   style=moderncv,
+   showevent=true,
+   authorhash=7ba24cb78eaec483f680a08422f4d516]{biblatex}
+%\usepackage[backend=biber]{biblatex}
+\DeclareLanguageMapping{american}{american-moderncv}
+\newlength{\hintscolumnwidth}
+\setlength{\hintscolumnwidth}{0.175\textwidth}
+\newlength{\separatorcolumnwidth}
+\setlength{\separatorcolumnwidth}{0.025\textwidth}
+\renewcommand*{\indauthorhash}[1]{\mkbibcolor{red}{#1}}
+\addbibresource{\jobname.bib}
+\begin{document}
+
+\nocite{*}
+
+\printbibliography[title={Test}]
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
