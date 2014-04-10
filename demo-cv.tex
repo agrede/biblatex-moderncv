@@ -1,13 +1,12 @@
 \documentclass[11pt,letterpaper,sans,american]{moderncv}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
 \usepackage{xcolor}
 \moderncvstyle{classic}
 \moderncvcolor{blue}
 % adjust margins
 \usepackage[scale=0.75]{geometry}
 \usepackage{textcomp}
-\usepackage[american]{babel}
+\usepackage{polyglossia}
+\setdefaultlanguage[variant=american]{english}
 \usepackage{csquotes}
 \usepackage[
    backend=biber,
@@ -15,7 +14,7 @@
    showevent=false,
    authorrole=true,
    authorhash=7ba24cb78eaec483f680a08422f4d516]{biblatex}
-\DeclareLanguageMapping{american}{american-moderncv}
+\DeclareLanguageMapping{english}{english-moderncv}
 % personal data
 \name{John B.}{Doe}
 %\title{Resumé title}                               % optional, remove / comment the line if not wanted
@@ -51,4 +50,5 @@
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: t
+%%% TeX-engine: xetex
 %%% End:
