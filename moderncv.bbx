@@ -294,30 +294,6 @@
        \usebibmacro{eventdate}}}%
   \newunit}
 
-
-\newbibmacro*{event+venue+location+date}{%
-  \printtext[doi/url-link]{%
-    \printfield{eventtitle}%
-  }%
-  \newunit%
-  \printfield{eventtitleaddon}%
-  \ifboolexpr{%
-    test {\iffieldundef{venue}}
-    and
-    test {\iffieldundef{eventyear}}
-    and
-    test {\iffieldundef{location}}
-  }%
-    {}%
-    {\setunit*{\addspace}%
-     \printtext[parens]{%
-       \printfield{venue}%
-       \setunit*{\addcomma\space}%
-       \printlist{location}%
-       \newunit%
-       \usebibmacro{eventdate}}}%
-  \newunit}
-
 % New bibliography drivers, using the required order of fields. These
 % are mainly copied from standard.bbx then modified.
 \DeclareBibliographyDriver{article}{%
@@ -607,7 +583,7 @@
       \usebibmacro{byeditor+others}%
       \newunit\newblock
       \printfield{volumes}}%
-    {\usebibmacro{event+venue+location+date}}%
+    {\usebibmacro{event+venue+date}}%
   \newunit\newblock
   \printfield{note}%
   \ifboolexpr{
