@@ -1,0 +1,11 @@
+This work consists of the files:
+moderncv.cbx
+moderncv.bbx
+american-moderncv.lbx
+english-moderncv.lbx
+
+demo-cv.tex
+simpletest.tex
+demo.bib
+
+gethash.pl
