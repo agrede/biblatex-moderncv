@@ -1,0 +1,230 @@
+%% biblatex-moderncv.tex
+%% Copyright (c) 2013--2014 Alex J. Grede <agrede@gmail.com>
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%% http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status `maintained'.
+%%
+%% The Current Maintainer of this work is Alex J. Grede
+%%
+%% This work consists of all files listed in manifest.txt.
+\documentclass[a4paper]{ltxdoc}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{minted}
+\usepackage{listings}
+\usepackage[english]{babel}
+\usepackage{csquotes, lmodern}
+\usepackage[
+   breaklinks=true,
+   colorlinks=true,
+   linkcolor=blue,
+   citecolor=blue,
+   urlcolor=blue]{hyperref}
+\usepackage[backend=biber, style=phys]{biblatex}
+
+\addbibresource{biblatex-moderncv.bib}
+
+\author{Alex J. Grede\thanks{E-mail:
+    \href{mailto:agrede@gmail.com}{\texttt{agrede@gmail.com}}}}
+\title{\pkg{biblatex-moderncv} -- A \pkg{biblatex} implementation for
+  use with the \pkg{moderncv} document class%
+  \footnote{This file describes v0.1.0, last revised 2014-04-11.}}
+\date{Released 2014-04-11}
+
+\providecommand*{\opt}[1]{\texttt{#1}}
+\providecommand*{\pkg}[1]{\textsf{#1}}
+\providecommand*{\bmcv}{\pkg{biblatex-moderncv}}
+
+\let\DescribeOption\DescribeEnv
+
+\RecordChanges
+
+\begin{document}
+\lstset{language=LaTeX}
+
+\maketitle
+
+This package is intended to provide a \citetitle{lehman_biblatex_2013}
+style for use with \citetitle{danaux_moderncv_2013}. The style is
+numeric, but has not been fully developed for citing within document
+aside from publication listings. The style is a mix of the standard
+style, borrows from styles of \textsc{AIP} and \textsc{AIP} (using
+\citetitle{wright_biblatex-phys_2013} as a reference), \textsc{Nature}
+(using \nocite{wright_biblatex-nature_2013} as a reference), and
+personal my own preferences.
+
+\section{Requirements}
+\label{sec:requirements}
+
+\begin{enumerate}
+\item \citetitle{kime_biber_2013} must be used as the bibliography
+  processor
+\item \citetitle{kern_xcolor_2007} is required for
+  \lstinline|\mkbibcolor|
+\item The date formatting requires:
+  \begin{enumerate}
+  \item \citetitle{braams_babel_2014} for \LaTeX users
+  \item \citetitle{charette_polyglossia_2013} for \XeTeX or \LuaTeX users
+  \end{enumerate}
+\item \citetitle{lehman_csquotes_2011} for article titles
+\item \citetitle{arseneau_url_2013} is used to format hyperlinks
+\end{enumerate}
+
+\section{Style options}
+\label{sec:style-options}
+
+Additional style options are provided for use in CV publication
+listings. Some default style options are changed as well.
+
+\DescribeOption{doi}
+\DescribeOption{eprint}
+\DescribeOption{isbn}
+\DescribeOption{url}
+These options are turned off by default in \bmcv{}. Instead the
+\opt{doi} and \opt{url} are used as they are in
+\citetitle{wright_biblatex-phys_2013} and used to create links for the
+title, journal title, proceedings title, or event title depending on
+context.
+
+\DescribeOption{articletitle}
+Inherited from \citetitle{wright_biblatex-phys_2013}, this boolean
+option will suppress the \opt{title} of \texttt{article} and
+\texttt{inproceedings} entries when set to \lstinline|false|. The
+default value is \lstinline|true|.
+
+\DescribeOption{biblabel}
+The default is set to \lstinline|superscript| which is used for
+citations. \emph{This feature is not currently available}.
+
+\DescribeOption{chaptertitle}
+Similar to \opt{articletitle}, \opt{chaptertitle} is a boolean value
+(default \lstinline|true|) which enables or disables the chapter title
+in \texttt{incollection} entries.
+
+\DescribeOption{pageranges}
+This boolean value (default \lstinline|true|) determines if the full
+range of page numbers is displayed or simply the first page. \emph{This
+  feature is not currently available}.
+
+\DescribeOption{maxnames}
+\DescribeOption{maxcitenames}
+The options \opt{maxnames} and \opt{maxcitenames} are set to \lstinline|999| and \lstinline|2|
+respectively by default for \bmcv{}.
+
+\DescribeOption{firstinits}
+This defaults to \lstinline|true| for \bmcv{}
+
+\DescribeOption{sorting}
+The default value (\lstinline|ddnt|) is one that has been created for
+\bmcv{}. This sorts entries by \emph{date} (descending),
+then \texttt{name}, and finally \texttt{title}.
+
+\DescribeOption{authorrole}
+This boolean (default \listinline|false|) allows the use of the
+\texttt{usera} field to detail what was contributed to the entry. This
+functions similar to \texttt{addendum}, but is moved to
+\texttt{usera} to prevent contamination when using the same bib file
+or reference database for other work.
+
+\DescribeOption{showevent}
+This boolean (default \lstinline|false|) will display the
+\texttt{eventtitle} and \texttt{eventdate} instead of the title of the
+proceedings (\texttt{booktitle}) and publication date
+(\texttt{date}). \emph{At present this does not change the sorting
+  scheme}.
+
+\DescribeOption{indauthorhash}
+This boolean (default \lstinline|true|) prints the author name (with
+hash set by \opt{authorhash}) using \lstinline|\indauthorhash|. By
+default this uses \lstinline|\mkbibbold| and is explained in greater
+detail later.
+
+\DescribeOption{authorhash}
+This is the hash value found in the \texttt{bbl} file generated by
+\citetitle{kime_biber_2013} for the author to highlight. This requires
+that the authors name be identical in each entry.
+
+\DescribeOption{punctfont}
+The default for \bmcv{} is \lstinline|true| more is explained in the
+manual for \citetitle{lehman_biblatex_2013}.
+
+\section{Author name formatting}
+\label{sec:auth-name-form}
+
+The commands for printing the authors name
+\lstinline|\mkbibnamefirst|, \lstinline|\mkbibnamelast|,
+\lstinline|\mkbibnameprefix|, and \lstinline|\mkbibnameaffix| are
+changed from simply printing the name given to passing to a command
+\lstinline|\bibnametest|. If both the authors name hash (from the
+\texttt{bbl} file) and \opt{indauthorhash} is \lstinline|true|, the
+name part is passed to \listinline|\indauthorhash| which by default
+passes to \lstinline|\mkbibbold|. There are several ways to change
+this behavior in the preamble for different effect. Some examples are
+listed here.
+
+\begin{minted}{latex}
+% Bold name (default)
+\renewcommand*{\indauthorhash}[1]{\mkbibbold{#1}}
+
+% Color name <color>
+\renewcommand*{\indauthorhash}[1]{\mkbibcolor{<color>}{#1}}
+
+% Emphasize name
+\renewcommand*{\indauthorhash}[1]{\mkbibemph{#1}}
+\end{minted}
+
+This method was inspired by a question on the TeX
+StackExchange\cite{audrey_make_2012}.
+
+The alias can be changed as normal (default is
+\lstinline|last-first|). Additional options can be found in the
+\citetitle{lehman_biblatex_2013} manual.
+
+\section{Date format}
+\label{sec:date-format}
+
+The itemized bibliography has the first occurrence of the year printed
+in the left of the list using a method from TeX
+StackExchange\cite{audrey_sorted_2013}. In order to remove the year
+from the entry date and print the month and day, the language file had
+to be modified similar to using
+\citetitle{kime_biblatex-apa_2013}. For \LaTeX users using babel the
+following must be in the preamble:
+
+\begin{minted}{latex}
+\usepackage[american]{babel}
+\usepackage{csquotes}
+\usepackage[backend=biber, style=moderncv]{biblatex}
+\DeclareLanguageMapping{american}{american-moderncv}
+\end{minted}
+or for \XeTeX and \LuaTeX:
+\begin{minted}{latex}
+\usepackage{polyglossia}
+\setdefaultlanguage[variant=american]{english}
+\usepackage{csquotes}
+\usepackage[backend=biber, style=moderncv]{biblatex}
+\DeclareLanguageMapping{english}{english-moderncv}
+\end{minted}
+
+Currently only the american style long date format is supported. The
+year will appear only for cases where a range is used in \texttt{date}
+where the start and end year differ. Also, in cases where the
+\texttt{eventdate} is used and does not span within the same year as
+\texttt{date}.
+
+\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% zotero-collection: #("13" 0 2 (name "LaTeX"))
+%%% End:
