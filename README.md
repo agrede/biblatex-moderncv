@@ -1,4 +1,4 @@
-# biblatx-moderncv #
+# biblatex-moderncv #
 
 Biblatex style for the moderncv class.
 
