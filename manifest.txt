@@ -9,3 +9,7 @@ simpletest.tex
 demo.bib
 
 gethash.pl
+
+
+biblatex-moderncv.tex
+biblatex-moderncv.bib
