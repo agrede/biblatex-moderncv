@@ -26,6 +26,7 @@
 \newtoggle{bbx:pageranges}
 \newtoggle{bbx:indauthorhash}
 \newtoggle{bbx:authorrole}
+\newtoggle{bbx:showyear}
 \edef\authorhash{}
 \DeclareBibliographyOption{authorrole}[true]{%
   \settoggle{bbx:authorrole}{#1}%
@@ -41,6 +42,9 @@
 }
 \DeclareBibliographyOption{pageranges}[true]{%
   \settoggle{bbx:pageranges}{#1}%
+}
+\DeclareBibliographyOption{showyear}[true]{%
+  \settoggle{bbx:showyear}{#1}%
 }
 \DeclareBibliographyOption{biblabel}{%
   \ifstrequal{#1}{brackets}
@@ -96,7 +100,7 @@
 
 \DeclareSortingScheme{cvsubtype}{
   \sort{\field{type}}
-  \sort{\field{subtype}}
+  \sort{\field{entrysubtype}}
   \sort[direction=descending]{\field{year}}
   \sort[direction=descending]{\field{month}}
   \sort[direction=descending]{\field{day}}
@@ -129,6 +133,7 @@
     punctfont      = true       ,
     showevent      = false      ,
     sorting        = cvdate     ,
+    showyear       = false      ,
     url            = false
   }
 
@@ -301,9 +306,10 @@
 
 \renewbibmacro*{date}{%
   \ifboolexpr{%
-    test {\iffieldsequal{year}{endyear}}%
+    (test {\iffieldsequal{year}{endyear}}%
     or%
-    test {\iffieldundef{endyear}}%
+    test {\iffieldundef{endyear}})%
+    and not togl {bbx:showyear}%
   }%
     {%
       \savefield{year}{\tmpyear}%
@@ -905,32 +911,42 @@
   \usebibmacro{begentry}%
   \usebibmacro{editor+others}%
   \setunit{\labelnamepunct}\newblock
-  \usebibmacro{maintitle+title}%
-  \newunit
-  \printlist{language}%
-  \newunit\newblock
-  \usebibmacro{event+venue+date}%
-  \newunit\newblock
-  \usebibmacro{byeditor+others}%
-  \newunit\newblock
-  \iffieldundef{maintitle}
-    {\printfield{volume}%
-     \printfield{part}}
-    {}%
-  \newunit
-  \printfield{volumes}%
-  \newunit\newblock
-  \usebibmacro{series+number}%
+  \ifboolexpr{%
+    not togl {bbx:showevent}
+    or
+    test {\iffieldundef{eventtitle}}
+  }%
+    {%
+      \usebibmacro{maintitle+title}%
+      \newunit
+      \printlist{language}%
+      \newunit\newblock
+      \iffieldundef{maintitle}
+        {\printfield{volume}%
+          \printfield{part}}
+        {}%
+      \newunit
+      \printfield{volumes}
+      \newunit\newblock
+      \usebibmacro{series+number}}%
+    {\usebibmacro{event+venue+date}}%
   \newunit\newblock
   \printfield{note}%
-  \newunit\newblock
-  \printlist{organization}%
-  \newunit
-  \usebibmacro{publisher+location+date}%
-  \newunit\newblock
-  \usebibmacro{chapter+pages}%
-  \newunit
-  \printfield{pagetotal}%
+  \ifboolexpr{
+    not togl {bbx:showevent}
+    or
+    test {\iffieldundef{eventtitle}}
+  }%
+    {%
+      \newunit\newblock
+      \printlist{organization}%
+      \newunit
+      \usebibmacro{publisher+location+date}
+      \newunit\newblock
+      \usebibmacro{chapter+pages}%
+      \newunit
+      \printfield{pagetotal}}%
+    {}%
   \newunit\newblock
   \iftoggle{bbx:isbn}
     {\printfield{isbn}}
