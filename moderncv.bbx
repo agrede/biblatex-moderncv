@@ -61,7 +61,42 @@
 }
 
 % New Sorting Schemes
-\DeclareSortingScheme{ddnt}{
+\DeclareSortingScheme{cvdate}{
+  \sort[direction=descending]{\field{year}}
+  \sort[direction=descending]{\field{month}}
+  \sort[direction=descending]{\field{day}}
+  \sort[sortcase=false]{
+    \field{sortname}
+    \field{author}
+    \field{editor}
+    \field{translator}
+  }
+  \sort[sortcase=false]{
+    \field{sorttitle}
+    \field{title}
+  }
+}
+
+\DeclareSortingScheme{cvtype}{
+  \sort{\field{type}}
+  \sort[direction=descending]{\field{year}}
+  \sort[direction=descending]{\field{month}}
+  \sort[direction=descending]{\field{day}}
+  \sort[sortcase=false]{
+    \field{sortname}
+    \field{author}
+    \field{editor}
+    \field{translator}
+  }
+  \sort[sortcase=false]{
+    \field{sorttitle}
+    \field{title}
+  }
+}
+
+\DeclareSortingScheme{cvsubtype}{
+  \sort{\field{type}}
+  \sort{\field{subtype}}
   \sort[direction=descending]{\field{year}}
   \sort[direction=descending]{\field{month}}
   \sort[direction=descending]{\field{day}}
@@ -93,7 +128,7 @@
     pageranges     = true       ,
     punctfont      = true       ,
     showevent      = false      ,
-    sorting        = ddnt       ,
+    sorting        = cvdate     ,
     url            = false
   }
 
@@ -103,15 +138,46 @@
 \renewcommand*{\finalnamedelim}{\addspace\&\addspace}
 
 % Bibliography list format
-\newcommand*{\bibyear}{}
-\AtBeginBibliography{\renewcommand*{\bibyear}{}}
+\newcommand*{\bibcurlabel}{}
+\AtBeginBibliography{\renewcommand*{\bibcurlabel}{}}
+
+\newcommand*{\bibentrylabel}{
+  \ifdefstring{\blx@sorting}{cvdate}
+    {\iffieldequals{year}{\bibcurlabel}
+      {}
+      {\printfield{year}%
+        \savefield{year}{\bibcurlabel}}
+    }
+    {\ifboolexpr{
+        test {\ifdefstring{\blx@sorting}{cvtype}}
+        or
+        (
+          test {\ifdefstring{\blx@sorting}{cvsubtype}}
+          and
+          test {\iffieldundef{entrysubtype}}
+        )
+      }
+    {\iffieldequals{type}{\bibcurlabel}
+      {}
+      {\printfield{type}%
+        \savefield{type}{\bibcurlabel}}
+    }
+  {\ifdefstring{\blx@sorting}{cvsubtype}
+    {\iffieldequals{entrysubtype}{\bibcurlabel}
+      {}
+      {\printfield{entrysubtype}%
+        \savefield{entrysubtype}{\bibcurlabel}}
+    }
+  {\printtext[labelnumberwidth]{%
+      \printfield{prefixnumber}%
+      \printfield{labelnumber}}}
+  }
+  }
+}
 
 \defbibenvironment{bibliography}
   {\list
-     {\iffieldequals{year}{\bibyear}
-        {}
-        {\printfield{year}%
-         \savefield{year}{\bibyear}}}
+    {\bibentrylabel}
      {\setlength{\topsep}{0pt}% layout parameters from moderncvstyleclassic.sty
       \setlength{\labelwidth}{\hintscolumnwidth}%
       \setlength{\labelsep}{\separatorcolumnwidth}%
@@ -141,6 +207,10 @@
     {\mkbibquote{#1\isdot}}
     {}%
 }
+
+\DeclareFieldFormat{usera}{\MakeSentenceCase{#1}}
+\DeclareFieldFormat{type}{\MakeSentenceCase{#1}}
+\DeclareFieldFormat{entrysubtype}{\MakeSentenceCase{#1}}
 
 %\DeclareFieldFormat*{journaltitle}{\mkbibemph{#1\isdot}}
 
