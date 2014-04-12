@@ -223,17 +223,30 @@
 
 \DeclareFieldFormat{doi/url-link}{%
   \ifhyperref
-    {%
-      \iffieldundef{doi}
-        {%
-          \iffieldundef{url}
-            {\@firstofone}
-            {\href{\thefield{url}}}%
+    {\iffieldundef{doi}
+      {\iffieldundef{eprint}
+        {\iffieldundef{eprint:pubmed}
+          {\iffieldundef{eprint:jstor}
+            {\iffieldundef{eprint:arxiv}
+              {\iffieldundef{isbn}
+                {\iffieldundef{url}
+                  {\@firstofone}
+                  {\href{\thefield{url}}}
+                }
+                {\href{http://www.worldcat.org/search?q=isbn\%3A\thefield{isbn}}}
+              }
+              {\href{http://arxiv.org\abx@arxivpath/\thefield{eprint:arxivpath}}}
+            }
+            {\href{http://www.jstor.org/stable\thefield{eprint:jstor}}}
+          }
+          {\href{http://www.ncbi.nlm.nih.gov/pubmed/\thefield{eprint:pubmed}}}
         }
-        {\href{http://dx.doi.org/\thefield{doi}}}%
+        {\href{\thefield{eprint}}}
+      }
+      {\href{http://dx.doi.org/\thefield{doi}}}
     }
     {\@firstofone}%
-      {#1}%
+    {#1}%
 }
 \DeclareFieldFormat*{eventtitle}{\mkbibemph{#1}}
 \DeclareFieldFormat*{eventtitleaddon}{\mkbibemph{#1}}
@@ -322,6 +335,25 @@
     }%
     {\printdate}%
 }
+
+\renewbibmacro*{maintitle+title}{%
+  \iffieldsequal{maintitle}{title}
+    {\clearfield{maintitle}%
+     \clearfield{mainsubtitle}%
+     \clearfield{maintitleaddon}}
+    {\iffieldundef{maintitle}
+       {}
+       {\usebibmacro{maintitle}%
+	\newunit\newblock
+	\iffieldundef{volume}
+	  {}
+	  {\printfield{volume}%
+           \printfield{part}%
+           \setunit{\addcolon\space}}}}%
+  \printtext[doi/url-link]{%
+    \usebibmacro{title}%
+  }%
+  \newunit}
 
 \renewbibmacro*{maintitle+booktitle}{
   \iffieldundef{maintitle}
