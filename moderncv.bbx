@@ -393,6 +393,59 @@
     {\printeventdate}%
 }
 
+\newbibmacro*{proceedingstitle}{%
+  \ifboolexpr{%
+    not togl {bbx:showevent}
+    or
+    test {\iffieldundef{eventtitle}}
+  }%
+    {\ifentrytypetype{proceedings}%
+      {%
+        \usebibmacro{maintitle+title}%
+        \newunit
+        \printlist{language}%
+        \newunit\newblock
+        \iffieldundef{maintitle}%
+          {\printfield{volume}%
+            \printfield{part}}%
+          {}%
+        \newunit
+      }%
+      {%
+        \usebibmacro{in:}%
+        \usebibmacro{maintitle+booktitle}%
+        \newunit\newblock
+        \usebibmacro{byeditor+others}%
+        \newunit\newblock
+      }%
+      \printfield{volumes}%
+      \newunit\newblock
+      \usebibmacro{series+number}%
+    }%
+    {\usebibmacro{event+venue+date}}%
+  \newunit\newblock
+  \printfield{note}%
+  \ifboolexpr{
+    not togl {bbx:showevent}
+    or
+    test {\iffieldundef{eventtitle}}
+  }%
+    {%
+      \newunit\newblock
+      \ifentrytypetype{proceedings}%
+      {}%
+      {%
+        usebibmacro{chapter+pages}%
+        \newunit\newblock
+      }%
+      \iftoggle{bbx:isbn}
+        {\printfield{isbn}}
+        {}%
+      \newunit\newblock
+      \usebibmacro{organization+date}}%
+    {}%
+}
+
 % \newbibmacro*{eventdate}{\printeventdate}
 
 \renewbibmacro*{event+venue+date}{%
