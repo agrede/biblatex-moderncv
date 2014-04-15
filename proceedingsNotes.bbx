@@ -1,0 +1,86 @@
+% Combination of proceedings and inproceedings drivers for standard
+% and phys styles. These are notes not a style
+\DeclareBibliographyDriver{<type>}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{<editor+others>/<author/translator+others>}
+  \setunit{\labelnamepunct}\newblock
+  <proc: maintitle==title, clear main title>
+  <inproc: title,language,byauthor,in>
+  \iffieldundef{maintitle} <wrapped in url link for inproc>
+    {}
+    {\usebibmacro{maintitle}%
+     \newunit\newblock
+     \iffieldundef{volume}
+       {}
+       {\printfield{volume}%
+        \printfield{part}%
+        \setunit{\addcolon\space}}}%
+  <proc: title,language(wrapped in url link for proc) / inproc: booktitle>
+  %BEGIN: event+venue+date Not in phys
+  \printfield{eventtitle}%
+  \newunit
+  \printfield{eventtitleaddon}%
+  \ifboolexpr{
+    test {\iffieldundef{venue}}
+    and
+    test {\iffieldundef{eventyear}}
+  }
+    {}
+    {\setunit*{\addspace}%
+     \printtext[parens]{%
+       \printfield{venue}%
+       \setunit*{\addcomma\space}%
+       \printeventdate}}%
+  \newunit
+  %:END
+  \newunit\newblock
+  \usebibmacro{byeditor+others}%
+  \newunit\newblock
+  \iffieldundef{maintitle} %phys never prints here always before byeditor
+    {\printfield{volume}%
+     \printfield{part}}
+    {}%
+  \newunit
+  \printfield{volumes}%
+  \newunit\newblock
+  %BEGIN: series+number
+  \printfield{series}%
+  \setunit*{\addspace}%
+  \printfield{number}%
+  \newunit
+  %:END
+  \newunit\newblock
+  \printfield{note}%
+  \newunit\newblock
+  \printlist{organization}%
+  \newunit
+  %BEGIN: publisher+location+date
+  \printlist{location}%
+  \iflistundef{publisher}
+    {\setunit*{\addcomma\space}}
+    {\setunit*{\addcolon\space}}%
+  \printlist{publisher}%
+  \setunit*{\addcomma\space}%
+  \usebibmacro{date}%
+  \newunit9
+  %:END
+  \newunit\newblock
+  \usebibmacro{chapter+pages}%
+  <proc: pagetotal>
+  \newunit\newblock
+  \iftoggle{bbx:isbn}
+    {\printfield{isbn}}
+    {}%
+  \newunit\newblock
+  \usebibmacro{doi+eprint+url}%
+  \newunit\newblock
+  \usebibmacro{addendum+pubstate}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
+  \newunit\newblock
+  \iftoggle{bbx:related}
+    {\usebibmacro{related:init}%
+     \usebibmacro{related}}
+    {}%
+  \usebibmacro{finentry}}
