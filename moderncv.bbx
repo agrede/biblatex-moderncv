@@ -27,6 +27,7 @@
 \newtoggle{bbx:indauthorhash}
 \newtoggle{bbx:authorrole}
 \newtoggle{bbx:showyear}
+\newtoggle{bbx:groupproceedings}
 \edef\authorhash{}
 \DeclareBibliographyOption{authorrole}[true]{%
   \settoggle{bbx:authorrole}{#1}%
@@ -45,6 +46,9 @@
 }
 \DeclareBibliographyOption{showyear}[true]{%
   \settoggle{bbx:showyear}{#1}%
+}
+\DeclareBibliographyOption{groupproceedings}[true]{%
+  \settoggle{bbx:groupproceedings}{#1}%
 }
 \DeclareBibliographyOption{biblabel}{%
   \ifstrequal{#1}{brackets}
@@ -134,7 +138,8 @@
     showevent      = false      ,
     sorting        = cvdate     ,
     showyear       = false      ,
-    url            = false
+    url            = false      ,
+    groupproceedings = false
   }
 
 \DeclareNameAlias{default}{last-first}
@@ -301,18 +306,6 @@
     {}%
 }
 
-\newbibmacro*{organization+date}{%
-  \setunit*{\addspace}%
-  \printtext[parens]{%
-    \iflistundef{organization}%
-      {\setunit*{\addcomma\space}}%
-      {\setunit*{\addcolon\space}}%
-    \printlist{organization}%
-    \setunit*{\addcomma\space}%
-    \usebibmacro{date}%
-  }%
-  \newunit%
-}
 
 \newcommand*{\tmpyear}{}
 \newcommand*{\tmpendyear}{}
@@ -393,67 +386,80 @@
     {\printeventdate}%
 }
 
-\newbibmacro*{proceedingstitle}{%
-  \ifboolexpr{%
-    not togl {bbx:showevent}
-    or
-    test {\iffieldundef{eventtitle}}
-  }%
-    {\ifentrytypetype{proceedings}%
-      {%
-        \usebibmacro{maintitle+title}%
-        \newunit
-        \printlist{language}%
-        \newunit\newblock
-        \iffieldundef{maintitle}%
-          {\printfield{volume}%
-            \printfield{part}}%
-          {}%
-        \newunit
+\newlength{\postnamesep}
+\setlength{\postnamesep}{0.5ex plus 2pt minus 1pt}
+\newcommand{\postsep}{\par\nobreak\vskip\postnamesep%
+  \hskip-\bibhang\ignorespaces}
+\newcommand*{\lastproctitle}{}
+
+\newcommand*{\lastproceedingstitle}
+
+\newbibmacro*{proceedingstitleheading}{%
+  \iftoggle{bbx:groupproceedings}%
+    {\ifsingletitle%
+      {\renewcommand*{\lastproceedingstitle}{}}%
+      {\iffieldequals{labeltitle}{\lastproceedingstitle}%
+        {\bibnamedash}%
+        {%
+          \savefield{labeltitle}{\lastproceedingstitle}%
+          \ifboolexpr{%
+            not togl {bbx:showevent}
+            or
+            test {\iffieldundef{eventtitle}}
+          }%
+          {\usebibmacro{proceedingstitle+organization+date}}%
+          {\usebibmacro{event+venue+date}}%
+          \postsep\bibnamedash%
+        }%
       }%
-      {%
-        \usebibmacro{in:}%
-        \usebibmacro{maintitle+booktitle}%
-        \newunit\newblock
-        \usebibmacro{byeditor+others}%
-        \newunit\newblock
-      }%
-      \printfield{volumes}%
-      \newunit\newblock
-      \usebibmacro{series+number}%
     }%
-    {\usebibmacro{event+venue+date}}%
-  \newunit\newblock
-  \printfield{note}%
-  \ifboolexpr{
-    not togl {bbx:showevent}
-    or
-    test {\iffieldundef{eventtitle}}
-  }%
-    {%
-      \newunit\newblock
-      \ifentrytypetype{proceedings}%
-      {}%
-      {%
-        usebibmacro{chapter+pages}%
-        \newunit\newblock
-      }%
-      \iftoggle{bbx:isbn}
-        {\printfield{isbn}}
-        {}%
-      \newunit\newblock
-      \usebibmacro{organization+date}}%
     {}%
 }
 
-% \newbibmacro*{eventdate}{\printeventdate}
+\newbibmacro*{proceedingstitle+organization+date}{%
+  \usebibmacro{proceedingstitle}%
+  \newunit\newblock
+  \printfield{volumes}%
+  \newunit\newblock
+  \usebibmacro{series+number}%
+  \usebibmacro{organization+date}%
+  \newunit
+}
 
 \renewbibmacro*{event+venue+date}{%
+  \usebibmacro{eventitle}%
+  \usebibmacro{venue+eventdate}%
+  \newunit%
+}
+
+\newbibmacro*{proceedingstitle}{%
+  \ifentrytype{proceedings}%
+    {\usebibmacro{maintitle+title}}%
+    {\usebibmacro{maintitle+booktitle}}%
+}
+
+\newbibmacro*{eventtitle}{%
   \printtext[doi/url-link]{%
     \printfield{eventtitle}%
   }%
   \newunit%
   \printfield{eventtitleaddon}%
+}
+
+\newbibmacro*{organization+date}{%
+  \setunit*{\addspace}%
+  \printtext[parens]{%
+    \iflistundef{organization}%
+      {\setunit*{\addcomma\space}}%
+      {\setunit*{\addcolon\space}}%
+    \printlist{organization}%
+    \setunit*{\addcomma\space}%
+    \usebibmacro{date}%
+  }%
+  \newunit%
+}
+
+\newbibmacro*{venue+eventdate}{%
   \ifboolexpr{%
     test {\iffieldundef{venue}}
     and
@@ -461,11 +467,14 @@
   }%
     {}%
     {\setunit*{\addspace}%
-     \printtext[parens]{%
-       \printfield{venue}%
-       \setunit*{\addcomma\space}%
-       \usebibmacro{eventdate}}}%
-  \newunit}
+      \printtext[parens]{%
+        \printfield{venue}%
+        \setunit*{\addcomma\space}%
+        \usebibmacro{eventdate}
+      }%
+    }%
+  \newunit%
+}
 
 % New bibliography drivers, using the required order of fields. These
 % are mainly copied from standard.bbx then modified.
@@ -736,6 +745,7 @@
 \DeclareBibliographyDriver{inproceedings}{%
   \usebibmacro{bibindex}%
   \usebibmacro{begentry}%
+  \usebibmacro{proceedingstitleheading}%
   \usebibmacro{author/translator+others}%
   \setunit{\labelnamepunct}\newblock
   \usebibmacro{title}%
@@ -745,18 +755,28 @@
   \usebibmacro{byauthor}%
   \newunit\newblock
   \ifboolexpr{%
-    not togl {bbx:showevent}
+    not togl {bbx:groupproceedings}
     or
-    test {\iffieldundef{eventtitle}}
+    test {\ifsingletitle}
   }%
-    {%
-      \usebibmacro{in:}%
-      \usebibmacro{maintitle+booktitle}%
-      \newunit\newblock
-      \usebibmacro{byeditor+others}%
-      \newunit\newblock
-      \printfield{volumes}}%
-    {\usebibmacro{event+venue+date}}%
+    {\ifboolexpr{%
+        (
+          not togl {bbx:showevent}
+          or
+          test {\iffieldundef{eventtitle}}
+        )
+      }%
+      {%
+        \usebibmacro{in:}%
+        \usebibmacro{maintitle+booktitle}%
+        \newunit\newblock
+        \usebibmacro{byeditor+others}%
+        \newunit\newblock
+        \printfield{volumes}%
+      }%
+      {\usebibmacro{eventtitle}}%
+    }%
+    {}%
   \newunit\newblock
   \printfield{note}%
   \ifboolexpr{
@@ -771,8 +791,24 @@
       \iftoggle{bbx:isbn}
         {\printfield{isbn}}
         {}%
-      \newunit\newblock
-      \usebibmacro{organization+date}}%
+    }%
+    {}%
+  \newunit\newblock
+  \ifboolexpr{%
+    not togl {bbx:groupproceedings}
+    or
+    test {\ifsingletitle}
+  }%
+    {\ifboolexpr{%
+        (
+          not togl {bbx:showevent}
+          or
+          test {\iffieldundef{eventtitle}}
+        )
+      }%
+      {\usebibmacro{organization+date}}%
+      {\usebibmacro{venue+eventdate}}%
+    }%
     {}%
   \newunit\newblock
   \usebibmacro{doi+eprint+url}%
