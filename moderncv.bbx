@@ -213,6 +213,7 @@
 \DeclareLabeltitle[proceedings]{%
   \field{title}
 }
+\DeclareLabeltitle{}
 
 \DeclareFieldFormat*{title}{\mkbibemph{#1\isdot}}
 \DeclareFieldFormat[article,inproceedings,patent]{title}{%
@@ -268,10 +269,10 @@
 % Bibliography Macros
 \newcommand*{\indauthorhash}[1]{\mkbibbold{#1}}
 \newcommand*{\bibnametest}[1]{%
-  \iffieldequals{hash}{\authorhash}
-    {\iftoggle{bbx:indauthorhash}
-      {\indauthorhash{#1}}
-      {#1}}
+  \iffieldequals{hash}{\authorhash}%
+    {\iftoggle{bbx:indauthorhash}%
+      {\indauthorhash{#1}}%
+      {#1}}%
   {#1}}
 
 \renewcommand*{\mkbibnamefirst}[1]{\bibnametest{#1}}
@@ -356,9 +357,9 @@
   }%
   \newunit}
 
-\renewbibmacro*{maintitle+booktitle}{
-  \iffieldundef{maintitle}
-    {}
+\renewbibmacro*{maintitle+booktitle}{%
+  \iffieldundef{maintitle}%
+    {}%
     {%
       \usebibmacro{maintitle}%
       \newunit
@@ -377,10 +378,10 @@
 }
 
 \newbibmacro*{eventdate}{%
-  \ifboolexpr{
-    test {\iffieldsequal{year}{eventyear}}
-    and
-    (test {\iffieldsequal{year}{eventendyear}} or test {\iffieldundef{eventendyear}})
+  \ifboolexpr{%
+    test {\iffieldsequal{year}{eventyear}}%
+    and%
+    (test {\iffieldsequal{year}{eventendyear}} or test {\iffieldundef{eventendyear}})%
   }%
     {%
       \savefield{eventyear}{\tmpyear}%
@@ -396,28 +397,29 @@
 
 \newlength{\postnamesep}
 \setlength{\postnamesep}{0.5ex plus 2pt minus 1pt}
-\newcommand{\postsep}{\par\nobreak\vskip\postnamesep%
-  \hskip-\bibhang\ignorespaces}
-\newcommand*{\lastproctitle}{}
+% \newcommand{\postsep}{\par\nobreak\vskip\postnamesep%
+%   \hskip-\bibhang\ignorespaces}
 
-\newcommand*{\lastproceedingstitle}
+\newcommand{\postsep}{\par\nobreak\hskip-\bibhang\ignorespaces}
+
+\newcommand*{\lastproceedingstitle}{}
 
 \newbibmacro*{proceedingstitleheading}{%
   \iftoggle{bbx:groupproceedings}%
     {\ifsingletitle%
       {\renewcommand*{\lastproceedingstitle}{}}%
       {\iffieldequals{labeltitle}{\lastproceedingstitle}%
-        {\bibnamedash}%
+        {\textemdash\space}%
         {%
           \savefield{labeltitle}{\lastproceedingstitle}%
           \ifboolexpr{%
-            not togl {bbx:showevent}
-            or
-            test {\iffieldundef{eventtitle}}
+            not togl {bbx:showevent}%
+            or%
+            test {\iffieldundef{eventtitle}}%
           }%
-          {\usebibmacro{proceedingstitle+organization+date}}%
-          {\usebibmacro{event+venue+date}}%
-          \postsep\bibnamedash%
+            {\usebibmacro{proceedingstitle+organization+date}}%
+            {\usebibmacro{event+venue+date}}%
+          \postsep\textemdash\space%
         }%
       }%
     }%
@@ -431,13 +433,13 @@
   \newunit\newblock
   \usebibmacro{series+number}%
   \usebibmacro{organization+date}%
-  \newunit
+  \newunit%
 }
 
 \renewbibmacro*{event+venue+date}{%
   \usebibmacro{eventtitle}%
   \usebibmacro{venue+eventdate}%
-  \newunit%
+  %\newunit%
 }
 
 \newbibmacro*{proceedingstitle}{%
@@ -469,19 +471,19 @@
 
 \newbibmacro*{venue+eventdate}{%
   \ifboolexpr{%
-    test {\iffieldundef{venue}}
-    and
-    test {\iffieldundef{eventyear}}
+    test {\iffieldundef{venue}}%
+    and%
+    test {\iffieldundef{eventyear}}%
   }%
     {}%
     {\setunit*{\addspace}%
       \printtext[parens]{%
         \printfield{venue}%
         \setunit*{\addcomma\space}%
-        \usebibmacro{eventdate}
+        \usebibmacro{eventdate}%
       }%
     }%
-  \newunit%
+  %\newunit%
 }
 
 % New bibliography drivers, using the required order of fields. These
