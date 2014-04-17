@@ -773,6 +773,8 @@
         \usebibmacro{byeditor+others}%
         \newunit\newblock
         \printfield{volumes}%
+        \newunit\newblock
+        \usebibmacro{series+number}%
       }%
       {\usebibmacro{eventtitle}}%
     }%
@@ -1032,27 +1034,34 @@
 \DeclareBibliographyDriver{proceedings}{%
   \usebibmacro{bibindex}%
   \usebibmacro{begentry}%
+  \usebibmacro{proceedingstitleheading}%
   \usebibmacro{editor+others}%
   \setunit{\labelnamepunct}\newblock
+  \newunit\newblock
   \ifboolexpr{%
-    not togl {bbx:showevent}
+    not togl {bbx:groupproceedings}
     or
-    test {\iffieldundef{eventtitle}}
+    test {\ifsingletitle}
   }%
-    {%
-      \usebibmacro{maintitle+title}%
-      \newunit
-      \printlist{language}%
-      \newunit\newblock
-      \iffieldundef{maintitle}
-        {\printfield{volume}%
-          \printfield{part}}
-        {}%
-      \newunit
-      \printfield{volumes}
-      \newunit\newblock
-      \usebibmacro{series+number}}%
-    {\usebibmacro{event+venue+date}}%
+    {\ifboolexpr{%
+        (
+          not togl {bbx:showevent}
+          or
+          test {\iffieldundef{eventtitle}}
+        )
+      }%
+      {%
+        \usebibmacro{maintitle+title}%
+        \newunit\newblock
+        \usebibmacro{byeditor+others}%
+        \newunit\newblock
+        \printfield{volumes}%
+        \newunit\newblock
+        \usebibmacro{series+number}%
+      }%
+      {\printtext[doi/url-link]{\usebibmacro{eventtitle}}}%
+    }%
+    {}%
   \newunit\newblock
   \printfield{note}%
   \ifboolexpr{
@@ -1062,17 +1071,31 @@
   }%
     {%
       \newunit\newblock
-      \printlist{organization}%
-      \newunit
-      \usebibmacro{publisher+location+date}
-      \newunit\newblock
       \usebibmacro{chapter+pages}%
       \newunit
-      \printfield{pagetotal}}%
+      \printfield{pagetotal}%
+      \newunit\newblock
+      \iftoggle{bbx:isbn}
+        {\printfield{isbn}}
+        {}%
+    }%
     {}%
   \newunit\newblock
-  \iftoggle{bbx:isbn}
-    {\printfield{isbn}}
+  \ifboolexpr{%
+    not togl {bbx:groupproceedings}
+    or
+    test {\ifsingletitle}
+  }%
+    {\ifboolexpr{%
+        (
+          not togl {bbx:showevent}
+          or
+          test {\iffieldundef{eventtitle}}
+        )
+      }%
+      {\usebibmacro{organization+date}}%
+      {\usebibmacro{venue+eventdate}}%
+    }%
     {}%
   \newunit\newblock
   \usebibmacro{doi+eprint+url}%
