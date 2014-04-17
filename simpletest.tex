@@ -34,9 +34,23 @@
    showevent=true,
    authorrole=true,
    defernumbers=true,
+   groupproceedings=true,
+   singletitle=true,
    authorhash=7ba24cb78eaec483f680a08422f4d516]{biblatex}
+\DeclareLabelname{\field{userc}}
+
+\DeclareLabeltitle{%
+  \field{title}
+}
+
+\DeclareLabeltitle[inproceedings]{%
+  \field{booktitle}
+}
+\DeclareLabeltitle[proceedings]{%
+  \field{title}
+}
 \DeclareLanguageMapping{american}{american-moderncv}
-\ExecuteBibliographyOptions{sorting=cvsubtype,showyear=true}
+%\ExecuteBibliographyOptions{sorting=cvsubtype,showyear=true}
 \renewcommand*{\bibfont}{\footnotesize}
 \definecolor{color0}{rgb}{0,0,0}% black
 \definecolor{color1}{rgb}{0.22,0.45,0.70}% light blue

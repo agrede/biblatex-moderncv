@@ -197,6 +197,12 @@
       \sloppy\clubpenalty4000\widowpenalty4000}
   {\endlist}
   {\item}
+  % {\item E\printfield{entrytype}%
+  %   \textendash L\printtext{\lastproceedingstitle}%
+  %   \textendash T\printfield{labeltitle}%
+  %   \textendash N\printfield{labelname}%
+  %   \textendash A\textbf{\iffieldequals{labeltitle}{\lastproceedingstitle}{TRUE}{FALSE}}%
+  %   \textendash I\emph{\ifsingletitle{TRUE}{FALSE}}:}
 
 
 \newrobustcmd*{\mkbibcolor}{\textcolor}
@@ -207,13 +213,18 @@
 
 % Custom field formats
 
+\DeclareLabelname{}
+
+\DeclareLabeltitle{%
+  \field{title}
+}
+
 \DeclareLabeltitle[inproceedings]{%
   \field{booktitle}
 }
 \DeclareLabeltitle[proceedings]{%
   \field{title}
 }
-\DeclareLabeltitle{}
 
 \DeclareFieldFormat*{title}{\mkbibemph{#1\isdot}}
 \DeclareFieldFormat[article,inproceedings,patent]{title}{%
