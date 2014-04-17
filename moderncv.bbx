@@ -206,6 +206,14 @@
 \blx@regimcs{\mkbibcolor}
 
 % Custom field formats
+
+\DeclareLabeltitle[inproceedings]{%
+  \field{booktitle}
+}
+\DeclareLabeltitle[proceedings]{%
+  \field{title}
+}
+
 \DeclareFieldFormat*{title}{\mkbibemph{#1\isdot}}
 \DeclareFieldFormat[article,inproceedings,patent]{title}{%
   \iftoggle{bbx:articletitle}
@@ -427,7 +435,7 @@
 }
 
 \renewbibmacro*{event+venue+date}{%
-  \usebibmacro{eventitle}%
+  \usebibmacro{eventtitle}%
   \usebibmacro{venue+eventdate}%
   \newunit%
 }
