@@ -349,21 +349,9 @@
 	  {\printfield{volume}%
            \printfield{part}%
            \setunit{\addcolon\space}}}}%
-  \ifboolexpr{%
-    togl {bbx:groupproceedings}%
-    and%
-    not test {\iffieldundef{entrysetcount}}%
-    and%
-    bool {bbx:subentry}%
-    and%
-    test {\ifentrytype{proceedings}}%
+  \printtext[doi/url-link]{%
+    \usebibmacro{title}%
   }%
-    {\usebibmacro{title}}%
-    {%
-      \printtext[doi/url-link]{%
-        \usebibmacro{title}%
-      }%
-    }%
   \newunit}
 
 \renewbibmacro*{maintitle+title}{%
@@ -490,11 +478,7 @@
     and%
     bool {bbx:subentry}%
     and%
-    (%
-      test {\ifentrytype{inproceedings}}%
-      or%
-      test {\ifentrytype{proceedings}}%
-    )%
+    test {\ifentrytype{inproceedings}}%
   }%
     {\printfield{eventtitle}}%
     {%
