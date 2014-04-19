@@ -349,6 +349,37 @@
 	  {\printfield{volume}%
            \printfield{part}%
            \setunit{\addcolon\space}}}}%
+  \ifboolexpr{%
+    togl {bbx:groupproceedings}%
+    and%
+    not test {\iffieldundef{entrysetcount}}%
+    and%
+    bool {bbx:subentry}%
+    and%
+    test {\ifentrytype{proceedings}}%
+  }%
+    {\usebibmacro{title}}%
+    {%
+      \printtext[doi/url-link]{%
+        \usebibmacro{title}%
+      }%
+    }%
+  \newunit}
+
+\renewbibmacro*{maintitle+title}{%
+  \iffieldsequal{maintitle}{title}
+    {\clearfield{maintitle}%
+     \clearfield{mainsubtitle}%
+     \clearfield{maintitleaddon}}
+    {\iffieldundef{maintitle}
+       {}
+       {\usebibmacro{maintitle}%
+	\newunit\newblock
+	\iffieldundef{volume}
+	  {}
+	  {\printfield{volume}%
+           \printfield{part}%
+           \setunit{\addcolon\space}}}}%
   \printtext[doi/url-link]{%
     \usebibmacro{title}%
   }%
@@ -361,9 +392,21 @@
       \usebibmacro{maintitle}%
       \newunit
     }%
-  \printtext[doi/url-link]{%
-    \usebibmacro{booktitle}%
+  \ifboolexpr{%
+    togl {bbx:groupproceedings}%
+    and%
+    not test {\iffieldundef{entrysetcount}}%
+    and%
+    bool {bbx:subentry}%
+    and%
+    test {\ifentrytype{inproceedings}}%
   }%
+    {\usebibmacro{booktitle}}%
+    {%
+      \printtext[doi/url-link]{%
+        \usebibmacro{booktitle}%
+      }%
+    }%
   \newunit\newblock
   \iffieldundef{volume}
     {}%
@@ -440,12 +483,29 @@
 }
 
 \newbibmacro*{eventtitle}{%
-  \printtext[doi/url-link]{%
-    \printfield{eventtitle}%
+  \ifboolexpr{%
+    togl {bbx:groupproceedings}%
+    and%
+    not test {\iffieldundef{entrysetcount}}%
+    and%
+    bool {bbx:subentry}%
+    and%
+    (%
+      test {\ifentrytype{inproceedings}}%
+      or%
+      test {\ifentrytype{proceedings}}%
+    )%
   }%
+    {\printfield{eventtitle}}%
+    {%
+      \printtext[doi/url-link]{%
+        \printfield{eventtitle}%
+      }%
+    }%
   \newunit%
   \printfield{eventtitleaddon}%
 }
+
 
 \newbibmacro*{organization+date}{%
   \setunit*{\addspace}%
