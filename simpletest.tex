@@ -39,7 +39,7 @@
    authorhash=7ba24cb78eaec483f680a08422f4d516]{biblatex}
 
 \DeclareLanguageMapping{american}{american-moderncv}
-%\ExecuteBibliographyOptions{sorting=cvsubtype,showyear=true}
+\ExecuteBibliographyOptions{sorting=cvtype}
 \renewcommand*{\bibfont}{\footnotesize}
 \definecolor{color0}{rgb}{0,0,0}% black
 \definecolor{color1}{rgb}{0.22,0.45,0.70}% light blue
@@ -52,11 +52,31 @@
 \setlength{\separatorcolumnwidth}{0.025\textwidth}
 \renewcommand*{\indauthorhash}[1]{\mkbibcolor{red}{#1}}
 \addbibresource{demo.bib}
+\newcommand*{\myyearlist}{}
+\forcsvlist{\listadd\myyearlist}{2014,2013,2012,2011}
+\forlistloop{\DeclareBibliographyCategory}{\myyearlist}
+\newcommand*{\myheading}[1]{\defbibheading{#1}{\subsection*{#1}}}
+% \newcommand*{\myaddcat}[2]{
+%   \ifcsundef{blx@catg@#1}
+%     {
+%       \DeclareBibliographyCategory{#1}
+%       \myheading{#1}
+%     }
+%     {}
+%   \addtocategory{#1}{#2}
+% }
+
+\forlistloop{\myheading}{\myyearlist}
+% \addtocategory{2014}{doe_widgets_2014,doe_beta_2014,doe_alpha_2014,proc_acme_2014,doe_designing_2014,doe_construct_2014,doe_alpha_2014b,doe_gamma_2014}
+% \addtocategory{2013}{doe_benefits_2013}
+% \addtocategory{2012}{doe_challenges_2012,smith_progress_2012,doe_future_2012,doe_proceedings_2012}
+\AtDataInput{\addtocategory{\strfield{year}}{\strfield{entrykey}}}
 \begin{document}
 
 \nocite{*}
 
-\printbibliography[title={Test}]
+\printbibheading
+\bibbycategory
 
 \end{document}
 %%% Local Variables:
