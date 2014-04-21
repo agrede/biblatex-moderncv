@@ -67,10 +67,8 @@
 % }
 
 \forlistloop{\myheading}{\myyearlist}
-% \addtocategory{2014}{doe_widgets_2014,doe_beta_2014,doe_alpha_2014,proc_acme_2014,doe_designing_2014,doe_construct_2014,doe_alpha_2014b,doe_gamma_2014}
-% \addtocategory{2013}{doe_benefits_2013}
-% \addtocategory{2012}{doe_challenges_2012,smith_progress_2012,doe_future_2012,doe_proceedings_2012}
 \AtDataInput{\addtocategory{\strfield{year}}{\strfield{entrykey}}}
+
 \begin{document}
 
 \nocite{*}
