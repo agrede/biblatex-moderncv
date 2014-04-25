@@ -29,6 +29,7 @@
 \newtoggle{bbx:showyear}
 \newtoggle{bbx:groupproceedings}
 \edef\authorhash{}
+\newcommand*{\indauthorhash}[1]{#1}
 \DeclareBibliographyOption{cvrole}[true]{%
   \settoggle{bbx:cvrole}{#1}%
 }
@@ -64,9 +65,24 @@
 \DeclareBibliographyOption{authorhash}{%
   \edef\authorhash{\detokenize{#1}}
 }
-\DeclareBibliographyOption{indauthorhash}[true]{%
-  \settoggle{bbx:indauthorhash}{#1}%
+\DeclareBibliographyOption{indauthorhash}{%
+  \toggletrue{bbx:indauthorhash}
+  \ifstrequal{#1}{bold}%
+    {\renewcommand*{\indauthorhash}[1]{\mkbibbold{##1}}}
+    {\ifstrequal{#1}{emph}%
+      {\renewcommand*{\indauthorhash}[1]{\mkbibemph{##1}}}
+      {\@ifundefinedcolor{\expandafter #1}%
+        {%
+          \togglefalse{bbx:indauthorhash}%
+          \renewcommand*{\indauthorhash}[1]{##1}%
+        }%
+        {\renewcommand*{\indauthorhash}[1]{\mkbibcolor{#1}{##1}}}%
+      }
+    }
 }
+% \DeclareBibliographyOption{indauthorhash}[true]{%
+%   \settoggle{bbx:indauthorhash}{#1}%
+% }
 
 % New Sorting Schemes
 \DeclareSortingScheme{cvdate}{
@@ -126,7 +142,7 @@
     articletitle     = true       ,
     chaptertitle     = true       ,
     biblabel         = superscript,
-    indauthorhash    = true       ,
+    indauthorhash    = bold       ,
     doi              = false      ,
     eprint           = false      ,
     firstinits       = true       ,
@@ -267,7 +283,6 @@
 \DeclareFieldFormat[article]{volume}{\mkbibbold{#1}}
 
 % Bibliography Macros
-\newcommand*{\indauthorhash}[1]{\mkbibbold{#1}}
 \newcommand*{\bibnametest}[1]{%
   \iffieldequals{hash}{\authorhash}%
     {\iftoggle{bbx:indauthorhash}%
