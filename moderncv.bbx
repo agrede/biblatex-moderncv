@@ -25,12 +25,12 @@
 \newtoggle{bbx:showevent}
 \newtoggle{bbx:pageranges}
 \newtoggle{bbx:indauthorhash}
-\newtoggle{bbx:authorrole}
+\newtoggle{bbx:cvrole}
 \newtoggle{bbx:showyear}
 \newtoggle{bbx:groupproceedings}
 \edef\authorhash{}
-\DeclareBibliographyOption{authorrole}[true]{%
-  \settoggle{bbx:authorrole}{#1}%
+\DeclareBibliographyOption{cvrole}[true]{%
+  \settoggle{bbx:cvrole}{#1}%
 }
 \DeclareBibliographyOption{articletitle}[true]{%
   \settoggle{bbx:articletitle}{#1}%
@@ -122,23 +122,23 @@
 
 \ExecuteBibliographyOptions
   {
-    authorrole     = false      ,
-    articletitle   = true       ,
-    chaptertitle   = true       ,
-    biblabel       = superscript,
-    indauthorhash  = true       ,
-    doi            = false      ,
-    eprint         = false      ,
-    firstinits     = true       ,
-    isbn           = false      ,
-    maxnames       = 999        ,
-    maxcitenames   = 2          ,
-    pageranges     = true       ,
-    punctfont      = true       ,
-    showevent      = false      ,
-    sorting        = cvdate     ,
-    showyear       = false      ,
-    url            = false      ,
+    cvrole           = false      ,
+    articletitle     = true       ,
+    chaptertitle     = true       ,
+    biblabel         = superscript,
+    indauthorhash    = true       ,
+    doi              = false      ,
+    eprint           = false      ,
+    firstinits       = true       ,
+    isbn             = false      ,
+    maxnames         = 999        ,
+    maxcitenames     = 2          ,
+    pageranges       = true       ,
+    punctfont        = true       ,
+    showevent        = false      ,
+    sorting          = cvdate     ,
+    showyear         = false      ,
+    url              = false      ,
     groupproceedings = false
   }
 
@@ -225,7 +225,9 @@
     {}%
 }
 
-\DeclareFieldFormat{usera}{\MakeSentenceCase{#1}}
+\DeclareDatamodelFields[type=field, datatype=literal]{cvrole}
+
+\DeclareFieldFormat{cvrole}{\MakeSentenceCase{#1}}
 \DeclareFieldFormat{type}{\MakeSentenceCase{#1}}
 \DeclareFieldFormat{entrysubtype}{\MakeSentenceCase{#1}}
 
@@ -307,9 +309,9 @@
   \printfield{eid}%
 }
 
-\newbibmacro*{authorrole}{%
-  \iftoggle{bbx:authorrole}%
-    {\printfield{usera}}
+\newbibmacro*{cvrole}{%
+  \iftoggle{bbx:cvrole}%
+    {\printfield{cvrole}}
     {}%
 }
 
@@ -581,7 +583,7 @@
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
-  \usebibmacro{authorrole}%
+  \usebibmacro{cvrole}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
@@ -629,7 +631,7 @@
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
-  \usebibmacro{authorrole}%
+  \usebibmacro{cvrole}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
@@ -666,7 +668,7 @@
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
-  \usebibmacro{authorrole}%
+  \usebibmacro{cvrole}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
@@ -712,7 +714,7 @@
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
-  \usebibmacro{authorrole}%
+  \usebibmacro{cvrole}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
@@ -758,7 +760,7 @@
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
-  \usebibmacro{authorrole}%
+  \usebibmacro{cvrole}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
@@ -803,7 +805,7 @@
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
-  \usebibmacro{authorrole}%
+  \usebibmacro{cvrole}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
@@ -889,7 +891,7 @@
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
-  \usebibmacro{authorrole}%
+  \usebibmacro{cvrole}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
@@ -936,7 +938,7 @@
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
-  \usebibmacro{authorrole}%
+  \usebibmacro{cvrole}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
@@ -973,7 +975,7 @@
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
-  \usebibmacro{authorrole}%
+  \usebibmacro{cvrole}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
@@ -1010,7 +1012,7 @@
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
-  \usebibmacro{authorrole}%
+  \usebibmacro{cvrole}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
@@ -1050,7 +1052,7 @@
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
-  \usebibmacro{authorrole}%
+  \usebibmacro{cvrole}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
@@ -1095,7 +1097,7 @@
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
-  \usebibmacro{authorrole}%
+  \usebibmacro{cvrole}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
@@ -1177,7 +1179,7 @@
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
-  \usebibmacro{authorrole}%
+  \usebibmacro{cvrole}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
@@ -1217,7 +1219,7 @@
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
-  \usebibmacro{authorrole}%
+  \usebibmacro{cvrole}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
@@ -1253,7 +1255,7 @@
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
-  \usebibmacro{authorrole}%
+  \usebibmacro{cvrole}%
   \setunit{\bibpagerefpunct}\newblock
   \usebibmacro{pageref}%
   \newunit\newblock
@@ -1277,7 +1279,7 @@
   \newunit\newblock
   \usebibmacro{location+date}%
   \newunit\newblock
-  \usebibmacro{authorrole}%
+  \usebibmacro{cvrole}%
   \newunit\newblock
   \iftoggle{bbx:url}
     {\usebibmacro{url+urldate}}
