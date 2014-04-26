@@ -833,7 +833,19 @@
   \usebibmacro{begentry}%
   \usebibmacro{author/translator+others}%
   \setunit{\labelnamepunct}\newblock
-  \usebibmacro{title}%
+  \ifboolexpr{%
+    not togl {bbx:groupproceedings}
+    or
+    test {\iffieldundef{entrysetcount}}
+    or
+    not bool {bbx:subentry}
+  }%
+    {\usebibmacro{title}}%
+    {%
+      \printtext[doi/url-link]{%
+        \usebibmacro{title}%
+      }%
+    }%
   \newunit
   \printlist{language}%
   \newunit\newblock
