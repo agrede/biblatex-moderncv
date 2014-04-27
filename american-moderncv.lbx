@@ -17,7 +17,36 @@
 
 \ProvidesFile{american-moderncv.lbx}[2014/04/11 v0.1.0 biblatex localization]
 \InheritBibliographyExtras{american}
-\InheritBibliographyStrings{american}
+
+\NewBibliographyString{article}
+\NewBibliographyString{articles}
+\NewBibliographyString{book}
+\NewBibliographyString{books}
+\NewBibliographyString{conference}
+\NewBibliographyString{conferences}
+\NewBibliographyString{letter}
+\NewBibliographyString{letters}
+\NewBibliographyString{review}
+\NewBibliographyString{reviews}
+\NewBibliographyString{software}
+\NewBibliographyString{softwares}
+
+
+\DeclareBibliographyStrings{%
+  inherit     = {american},
+  article     = {{article}{article}},
+  articles    = {{articles}{articles}},
+  conference  = {{conference}{conference}},
+  conferences = {{conferences}{conferences}},
+  book        = {{book}{book}},
+  books       = {{books}{books}},
+  letter      = {{letter}{letter}},
+  letters     = {{letters}{letters}},
+  review      = {{review}{review}},
+  reviews     = {{reviews}{reviews}},
+  software    = {{software}{software}},
+  softwares   = {{software}{software}},
+}
 
 \protected\gdef\lbx@us@mkbibrangetrunc@long#1#2{%
   \ifboolexpr{%

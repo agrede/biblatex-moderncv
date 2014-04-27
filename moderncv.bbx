@@ -164,41 +164,80 @@
 \renewcommand*{\finalnamedelim}{\addspace\&\addspace}
 
 % Bibliography list format
-\newcommand*{\bibcurlabel}{}
-\AtBeginBibliography{\renewcommand*{\bibcurlabel}{}}
 
-\newcommand*{\bibentrylabel}{
-  \ifdefstring{\blx@sorting}{cvdate}
-    {\iffieldequals{year}{\bibcurlabel}
-      {}
-      {\printfield{year}%
-        \savefield{year}{\bibcurlabel}}
-    }
-    {\ifboolexpr{
-        test {\ifdefstring{\blx@sorting}{cvtype}}
-        or
-        (
-          test {\ifdefstring{\blx@sorting}{cvsubtype}}
-          and
-          test {\iffieldundef{entrysubtype}}
-        )
+\forcsvlist{\listadd\cvsorts}{cvdate,cvtype,cvsubtype}
+\xdef\blx@moderncv@curlabel{}
+\xdef\blx@moderncv@labels{}
+\xdef\blx@moderncv@plabels{}
+
+\newcommand*{\bibentrylabel}{%
+  \ifcsequal{blx@moderncv@label@\thefield{entrykey}}{blx@moderncv@curlabel}%
+    {}%
+    {\xifinlist{\blx@sorting}{\cvsorts}
+      {\ifbibxstring{\csuse{blx@moderncv@label@\thefield{entrykey}}}%
+        {\xifinlist{\csuse{blx@moderncv@label@\thefield{entrykey}}}{\blx@moderncv@plabels}%
+          {\printtext[cvlabel]{\bibxstring{\csuse{blx@moderncv@label@\thefield{entrykey}}s}}}
+          {\printtext[cvlabel]{\bibxstring{\csuse{blx@moderncv@label@\thefield{entrykey}}}}}
+        }
+        {\printtext[cvlabel]{\csuse{blx@moderncv@label@\thefield{entrykey}}}}
+      \xdef\blx@moderncv@curlabel{\csuse{blx@moderncv@label@\thefield{entrykey}}}
       }
-    {\iffieldequals{type}{\bibcurlabel}
-      {}
-      {\printfield{type}%
-        \savefield{type}{\bibcurlabel}}
-    }
-  {\ifdefstring{\blx@sorting}{cvsubtype}
-    {\iffieldequals{entrysubtype}{\bibcurlabel}
-      {}
-      {\printfield{entrysubtype}%
-        \savefield{entrysubtype}{\bibcurlabel}}
-    }
-  {\printtext[labelnumberwidth]{%
-      \printfield{prefixnumber}%
-      \printfield{labelnumber}}}
+      {\printtext[labelnumberwidth]{%
+          \printfield{prefixnumber}%
+          \printfield{labelnumber}%
+        }%
+      }%
+    }%
+}
+\newcommand*{\bibentrylabeld}{%
+  \ifdefstring{\blx@sorting}{cvdate}%
+    {\savefieldcs{year}{blx@moderncv@label@\thefield{entrykey}}}%
+    {\ifboolexpr{%
+        test {\ifdefstring{\blx@sorting}{cvtype}}%
+        or%
+        (%
+          test {\ifdefstring{\blx@sorting}{cvsubtype}}%
+          and%
+          test {\iffieldundef{entrysubtype}}%
+        )%
+      }%
+      {\savefieldcs{type}{blx@moderncv@label@\thefield{entrykey}}}%
+      {\ifdefstring{\blx@sorting}{cvsubtype}%
+        {\savefieldcs{entrysubtype}{blx@moderncv@label@\thefield{entrykey}}}%
+        {}%
+      }%
+    }%
+}
+
+\AtDataInput{%
+  \xifinlist{\blx@sorting}{\cvsorts}%
+    {\bibentrylabeld}%
+    {}%
+}
+
+\AtBeginBibliography{%
+  \wlog{BEGIN:BeginBib}
+  \wlog{LastLists:}
+  \wlog{Labels: \forlistloop{,}{\blx@moderncv@labels}}
+  \wlog{pLabels: \forlistloop{,}{\blx@moderncv@plabels}}
+  \xdef\blx@moderncv@curlabel{}
+  \xdef\blx@moderncv@labels{}
+  \xdef\blx@moderncv@plabels{}
+  \renewcommand*{\do}[1]{%
+    \ifcsvoid{blx@moderncv@label@#1}%
+      {}%
+      {\xifinlist{\csuse{blx@moderncv@label@#1}}{\blx@moderncv@plabels}%
+        {}%
+        {\xifinlist{\csuse{blx@moderncv@label@#1}}{\blx@moderncv@labels}%
+          {\listxadd{\blx@moderncv@plabels}{\csuse{blx@moderncv@label@#1}}}%
+          {\listxadd{\blx@moderncv@labels}{\csuse{blx@moderncv@label@#1}}}%
+        }%
+      }%
   }
-  }
+  \dolistloop{\blx@tempa}
+  \wlog{NowLists:}
+  \wlog{Labels: \forlistloop{,}{\blx@moderncv@labels}}
+  \wlog{pLabels: \forlistloop{,}{\blx@moderncv@plabels}}
 }
 
 \defbibenvironment{bibliography}
@@ -219,6 +258,7 @@
   %   \textendash N\printfield{labelname}%
   %   \textendash A\textbf{\iffieldequals{labeltitle}{\lastproceedingstitle}{TRUE}{FALSE}}%
   %   \textendash I\emph{\ifsingletitle{TRUE}{FALSE}}:}
+
 
 
 \newrobustcmd*{\mkbibcolor}{\textcolor}
@@ -246,6 +286,7 @@
 \DeclareFieldFormat{cvrole}{\MakeSentenceCase{#1}}
 \DeclareFieldFormat{type}{\MakeSentenceCase{#1}}
 \DeclareFieldFormat{entrysubtype}{\MakeSentenceCase{#1}}
+\DeclareFieldFormat{cvlabel}{\MakeSentenceCase{#1}}
 
 %\DeclareFieldFormat*{journaltitle}{\mkbibemph{#1\isdot}}
 
