@@ -1,8 +1,11 @@
 # biblatex-moderncv #
 
+**STILL IN DEVELOPMENT**
+
 Biblatex style for the moderncv class.
 
-See biblatex-moderncv.pdf for more details. This is still in development.
+See ~~biblatex-moderncv.pdf~~ for more details (out of date). As of
+now simpletest.tex is the best reference.
 
 ## Requirements ##
 * Language package
