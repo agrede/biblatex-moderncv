@@ -29,8 +29,12 @@
    backend=biber,
    style=moderncv,
    showevent=false,
-   authorrole=true,
+   cvrole=true,
+   groupproceedings=true,
+   subentry=true,
+   indauthorhash=color1,
    authorhash=7ba24cb78eaec483f680a08422f4d516]{biblatex}
+\usepackage{pgffor}
 \DeclareLanguageMapping{english}{english-moderncv}
 % personal data
 \name{John B.}{Doe}
@@ -52,7 +56,35 @@
 
 % Bibliography
 \addbibresource{demo.bib}
+\renewcommand*{\bibfont}{\footnotesize}
+\xdef\bibcatgs{}
+\newcommand*{\myaddcatg}[2]{%
+  \wlog{BEGIN: ADDCAT}%
+  \wlog{\meaning#1: \meaning#2}
+  \DeclareBibliographyCategory{#1}%
+  \defbibheading{#1}{\subsection*{#2}}%
+  \wlog{END: ADDCAT}%
+}
 
+\myaddcatg{book}{Book}
+\myaddcatg{review}{Review}
+\myaddcatg{article}{Articles}
+\myaddcatg{letter}{Letter}
+\myaddcatg{conference}{Conference}
+\foreach \catg/\head in {book/Book,review/Review,article/Articles,letter/Letter,conference/Conference}{%
+  % \edef\tmp{\noexpand\myaddcatg{\catg}{\head}}
+  % \wlog{BEFORE:TMP}
+  % \tmp
+  % \wlog{AFTER:TMP}
+  \listxadd{\bibcatgs}{\catg}
+}
+\AtDataInput{%
+  \wlog{SHOW:\show\strfield{type}}
+  \xifinlist{\thefield{type}}{\bibcatgs}%
+    {\addtocategory{\strfield{type}}{\strfield{entrykey}}}%
+    {}%
+}
+\defbibheading{book}{\subsection*{Book}}
 \begin{document}
 \makecvtitle
 \section{Research Interests}
@@ -61,7 +93,9 @@
 \cvlistitem{Widgets, widgets, widgets}
 % Bibliography
 \nocite{*} % Includes all, only have desired entries in .bib file
-\printbibliography[title={Publications}]
+\printbibheading[title={Publications}]
+\bibbycategory
+%\printbibliography[heading=subbibliography, title={Other}, notcategory={*}]
 
 \end{document}
 %%% Local Variables:
