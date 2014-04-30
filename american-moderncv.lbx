@@ -69,22 +69,24 @@
         test {\iffieldundef{#2endmonth}}%
       }%
         {}%
-        {\bibdatedash%
-          \ifboolexpr{%
-            test {\iffieldsequal{#2year}{#2endyear}}%
-            or%
-            test {\iffieldundef{#2endyear}}%
-          }%
-            {\iffieldsequal{#2month}{#2endmonth}%
-              {\iffieldundef{#2year}%
-                {\csuse{mkbibdate#1}{}{}{#2endday}}%
-                {\csuse{mkbibdate#1}{#2year}{}{#2endday}}%
-              }%
-              {\iffieldundef{#2year}%
-                {\csuse{mkbibdate#1}{}{#2endmonth}{#2endday}}%
-                {\csuse{mkbibdate#1}{#2year}{#2endmonth}{#2endday}}%
-              }}%
-             {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}}}}}
+        {\iffieldequalstr{#2endyear}{}%
+          {\mbox{\bibdatedash}}%
+          {\bibdatedash%
+            \ifboolexpr{%
+              test {\iffieldsequal{#2year}{#2endyear}}%
+              or%
+              test {\iffieldundef{#2endyear}}%
+            }%
+              {\iffieldsequal{#2month}{#2endmonth}%
+                {\iffieldundef{#2year}%
+                  {\csuse{mkbibdate#1}{}{}{#2endday}}%
+                  {\csuse{mkbibdate#1}{#2year}{}{#2endday}}%
+                }%
+                {\iffieldundef{#2year}%
+                  {\csuse{mkbibdate#1}{}{#2endmonth}{#2endday}}%
+                  {\csuse{mkbibdate#1}{#2year}{#2endmonth}{#2endday}}%
+                }}%
+              {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}}}}}}
 
 \protected\gdef\lbx@us@mkbibrangetrunc@short#1#2{%
   \ifboolexpr{%
@@ -107,8 +109,16 @@
          test {\iffieldundef{#2endmonth}}%
        }%
          {}%
-         {\bibdatedash%
-             \csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}}}}
+         {\iffieldequalstr{#2endyear}{}%
+           {\mbox{\bibdatedash}}%
+           {\bibdatedash%
+             \ifboolexpr{%
+              test {\iffieldsequal{#2year}{#2endyear}}%
+              or%
+              test {\iffieldundef{#2endyear}}%
+            }%
+              {\csuse{mkbibdate#1}{#2year}{#2endmonth}{#2endday}}%
+              {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}}}}}}
 
 \protected\gdef\lbx@us@mkbibrangetruncextra@long#1#2{%
   \ifboolexpr{%
@@ -130,24 +140,33 @@
         and%
         test {\iffieldundef{#2endmonth}}%
       }%
-        {\printfield{extrayear}}%
+        {\iffieldundef{#2year}{}{\printfield{extrayear}}}%
         {\bibdatedash%
-          \ifboolexpr{%
-            test {\iffieldsequal{#2year}{#2endyear}}%
-            or%
-            test {\iffieldundef{#2endyear}}%
-          }%
-            {\iffieldsequal{#2month}{#2endmonth}%
-              {\iffieldundef{#2year}%
-                {\csuse{mkbibdate#1}{}{}{#2endday}}%
-                {\csuse{mkbibdate#1}{#2year}{}{#2endday}}%
+          \iffieldequalstr{#2endyear}{}%
+            {\printfield{extrayear}%
+              \mbox{bibdatedash}}%
+            {\ifboolexpr{%
+                test {\iffieldsequal{#2year}{#2endyear}}%
+                or%
+                test {\iffieldundef{#2endyear}}%
               }%
-              {\iffieldundef{#2year}%
-                {\csuse{mkbibdate#1}{}{#2endmonth}{#2endday}}%
-                {\csuse{mkbibdate#1}{#2year}{#2endmonth}{#2endday}}%
-              }}%
-            {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}%
-          \printfield{extrayear}}}}}
+              {\iffieldsequal{#2month}{#2endmonth}%
+                {\iffieldundef{#2year}%
+                  {\csuse{mkbibdate#1}{}{}{#2endday}}%
+                  {\csuse{mkbibdate#1}{#2year}{}{#2endday}}%
+                }%
+                {\iffieldundef{#2year}%
+                  {\csuse{mkbibdate#1}{}{#2endmonth}{#2endday}}%
+                  {\csuse{mkbibdate#1}{#2year}{#2endmonth}{#2endday}}%
+                }}%
+              {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}%
+            \ifboolexpr{%
+              test {\ifffieldundef{#2year}}%
+              and%
+              test {\iffieldundef{#2endyear}}
+            }%
+              {}%
+              {\printfield{extrayear}}}}}}}
 
 \protected\gdef\lbx@us@mkbibrangetruncextra@short#1#2{%
   \ifboolexpr{%
@@ -169,9 +188,24 @@
          and%
          test {\iffieldundef{#2endmonth}}%
        }%
-         {\printfield{extrayear}}%
-         {\bibdatedash%
-           \csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}%
-           \printfield{extrayear}}}}}
+         {\iffieldundef{#2year}{}{\printfield{extrayear}}}%
+         {\iffieldequalstr{#2endyear}{}%
+           {\printfield{extrayear}%
+             \mbox{\bibdatedash}}%
+           {\bibdatedash%
+             \ifboolexpr{%
+              test {\iffieldsequal{#2year}{#2endyear}}%
+              or%
+              test {\iffieldundef{#2endyear}}%
+            }%
+              {\csuse{mkbibdate#1}{#2year}{#2endmonth}{#2endday}}%
+              {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}%
+            \ifboolexpr{%
+              test {\iffieldundef{#2year}}%
+              and%
+              test {\iffieldundef{#2endyear}}%
+            }%
+              {}%
+              {\printfield{extrayear}}}}}}}}
 
 \endinput
