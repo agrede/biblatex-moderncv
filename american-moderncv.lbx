@@ -143,7 +143,7 @@
         {\iffieldundef{#2year}{}{\printfield{extrayear}}}%
         {\bibdatedash%
           \iffieldequalstr{#2endyear}{}%
-            {\printfield{extrayear}%
+            {\iffieldundef{#2year}{}{\printfield{extrayear}}%
               \mbox{bibdatedash}}%
             {\ifboolexpr{%
                 test {\iffieldsequal{#2year}{#2endyear}}%
@@ -190,7 +190,7 @@
        }%
          {\iffieldundef{#2year}{}{\printfield{extrayear}}}%
          {\iffieldequalstr{#2endyear}{}%
-           {\printfield{extrayear}%
+           {\iffieldundef{#2year}{}{\printfield{extrayear}}%
              \mbox{\bibdatedash}}%
            {\bibdatedash%
              \ifboolexpr{%
@@ -206,6 +206,6 @@
               test {\iffieldundef{#2endyear}}%
             }%
               {}%
-              {\printfield{extrayear}}}}}}}}
+              {\printfield{extrayear}}}}}}}
 
 \endinput
