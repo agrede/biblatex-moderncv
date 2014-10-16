@@ -266,8 +266,8 @@
 \DeclareFieldFormat{cvrole}{\MakeSentenceCase{#1}}
 \DeclareFieldFormat{cvlabel}{\MakeSentenceCase{#1}}
 
-\DeclareFieldFormat{type}{\MakeSentenceCase{#1}}
-\DeclareFieldFormat{entrysubtype}{\MakeSentenceCase{#1}}
+\DeclareFieldFormat{type}{\MakeSentenceCase{\ifbibstring{#1}{\bibstring{#1}}{#1}}}
+\DeclareFieldFormat{entrysubtype}{\MakeSentenceCase{\ifbibstring{#1}{\bibstring{#1}}{#1}}}
 
 \DeclareFieldFormat[article]{number}{\mkbibparens{#1}}
 \DeclareFieldFormat[article]{volume}{\mkbibbold{#1}}

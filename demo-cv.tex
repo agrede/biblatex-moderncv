@@ -28,14 +28,16 @@
 \usepackage[
    backend=biber,
    style=moderncv,
-   showevent=false,
+   showevent=true,
    cvrole=true,
+   defernumbers=true,
    groupproceedings=true,
+   indauthorhash = red,
    subentry=true,
-   indauthorhash=color1,
    authorhash=7ba24cb78eaec483f680a08422f4d516]{biblatex}
-\usepackage{pgffor}
+
 \DeclareLanguageMapping{english}{english-moderncv}
+\ExecuteBibliographyOptions{sorting=cvtype}
 % personal data
 \name{John B.}{Doe}
 %\title{Resumé title}                               % optional, remove / comment the line if not wanted
@@ -57,34 +59,23 @@
 % Bibliography
 \addbibresource{demo.bib}
 \renewcommand*{\bibfont}{\footnotesize}
-\xdef\bibcatgs{}
-\newcommand*{\myaddcatg}[2]{%
-  \wlog{BEGIN: ADDCAT}%
-  \wlog{\meaning#1: \meaning#2}
-  \DeclareBibliographyCategory{#1}%
-  \defbibheading{#1}{\subsection*{#2}}%
-  \wlog{END: ADDCAT}%
-}
+\newcommand*{\myyearlist}{}
+\forcsvlist{\listadd\myyearlist}{2014,2013,2012,2011}
+\forlistloop{\DeclareBibliographyCategory}{\myyearlist}
+\newcommand*{\myheading}[1]{\defbibheading{#1}{\subsection*{#1}}}
+% \newcommand*{\myaddcat}[2]{
+%   \ifcsundef{blx@catg@#1}
+%     {
+%       \DeclareBibliographyCategory{#1}
+%       \myheading{#1}
+%     }
+%     {}
+%   \addtocategory{#1}{#2}
+% }
 
-\myaddcatg{book}{Book}
-\myaddcatg{review}{Review}
-\myaddcatg{article}{Articles}
-\myaddcatg{letter}{Letter}
-\myaddcatg{conference}{Conference}
-\foreach \catg/\head in {book/Book,review/Review,article/Articles,letter/Letter,conference/Conference}{%
-  % \edef\tmp{\noexpand\myaddcatg{\catg}{\head}}
-  % \wlog{BEFORE:TMP}
-  % \tmp
-  % \wlog{AFTER:TMP}
-  \listxadd{\bibcatgs}{\catg}
-}
-\AtDataInput{%
-  \wlog{SHOW:\show\strfield{type}}
-  \xifinlist{\thefield{type}}{\bibcatgs}%
-    {\addtocategory{\strfield{type}}{\strfield{entrykey}}}%
-    {}%
-}
-\defbibheading{book}{\subsection*{Book}}
+\forlistloop{\myheading}{\myyearlist}
+\AtDataInput{\addtocategory{\strfield{year}}{\strfield{entrykey}}}
+
 \begin{document}
 \makecvtitle
 \section{Research Interests}
