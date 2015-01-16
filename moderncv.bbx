@@ -588,13 +588,11 @@
   \iftoggle{bbx:isbn}
     {\printfield{issn}}
     {}%
-  \newunit\newblock
-  \iffieldundef{pages}
-    {\usebibmacro{doi+eprint+url}}
-    {}%
   \printtext[parens]{%
     \usebibmacro{date}%
   }
+  \newunit\newblock
+  \usebibmacro{doi+eprint+url}%
   \newunit\newblock
   \usebibmacro{addendum+pubstate}%
   \newunit\newblock
